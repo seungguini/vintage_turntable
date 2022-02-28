@@ -5,12 +5,13 @@
   "main": "script.js",
   "scripts": {
     "test": "mocha --require babel-register tests/*.js --timeout 100000 --exit",
-    "dev": "nodemon ./server.js",
+    "dev": "node ./server.js",
     "coverage": "cross-env NODE=development nyc --reporter=html --reporter=text npm test --exit"
   },
   "author": "Seunggun",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.19.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
