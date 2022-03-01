@@ -5,7 +5,7 @@
   "main": "script.js",
   "scripts": {
     "test": "mocha --require babel-register tests/*.js --timeout 100000 --exit",
-    "dev": "node ./server.js",
+    "dev": "nodemon ./server.js",
     "coverage": "cross-env NODE=development nyc --reporter=html --reporter=text npm test --exit"
   },
   "author": "Seunggun",
