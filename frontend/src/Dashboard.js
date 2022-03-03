@@ -3,6 +3,8 @@ import useAuth from "./useAuth"
 import { Container, Form } from "react-bootstrap"
 import SpotifyWebApi from "spotify-web-api-node"
 import axios from "axios"
+import TrackSearchResult from "./TrackSearchResult"
+import Player from "./Player"
 
 const server_url = process.env.REACT_APP_SERVER_URL
 
@@ -10,10 +12,13 @@ const spotifyAPI = new SpotifyWebApi({
   clientId: process.env.REACT_APP_CLIENT_ID,
 })
 const Dashboard = ({ code }) => {
-  let accessToken = ""
-  let refreshToken = ""
-  let expiresIn = 0
+  const [accessToken, setAccessToken] = useState()
 
+  const [playingTrack, setPlayingTrack] = useState() // Store the track RESULT
+
+  const chooseTrack = (result) => {
+    setPlayingTrack(result)
+  }
   // Update auth states whenever there is a new auth code from the client side
   useEffect(() => {
     console.log("Getting access token and saving to localStorage!")
@@ -28,7 +33,7 @@ const Dashboard = ({ code }) => {
         localStorage.setItem("accessToken", res.data.accessToken)
         localStorage.setItem("refreshToken", res.data.refreshToken)
         localStorage.setItem("expiresIn", res.data.expiresIn)
-
+        setAccessToken(res.data.accessToken)
         spotifyAPI.setAccessToken(res.data.accessToken)
 
         // window.history.pushState({}, null, "/")
@@ -56,16 +61,21 @@ const Dashboard = ({ code }) => {
 
   return (
     <Container className="d-flex flex-column py-2">
-      {code}
+      <Player playingTrack={playingTrack} accessToken={accessToken} />
+
       <Form.Control
         type="search"
         placeholder="Search Songs / Artists"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      {searchResults.map((result, idx) => {
-        return <p key={idx}>{result.name}</p>
-      })}
+      {searchResults.map((result, idx) => (
+        <TrackSearchResult
+          key={idx}
+          result={result}
+          chooseTrack={chooseTrack}
+        />
+      ))}
     </Container>
   )
 }
