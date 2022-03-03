@@ -4,7 +4,7 @@ import SpotifyPlayer from "react-spotify-web-playback"
 export default function Player({ playingTrack, accessToken }) {
   useEffect(() => {
     console.log("found accessToken - attempting to render player!")
-  }, [accessToken])
+  }, [accessToken, playingTrack])
 
   if (!accessToken) {
     console.log("No acessToken")
@@ -25,6 +25,7 @@ export default function Player({ playingTrack, accessToken }) {
       showSaveIcon
       autoPlay
       magnifySliderOnHover
+      syncExternalDevice
       uris={trackURI ? [trackURI] : []}
     />
   )
