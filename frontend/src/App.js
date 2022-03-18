@@ -28,11 +28,13 @@ const App = () => {
           <Environment preset="apartment" background />
         </Suspense>
       </Canvas>
-      {code ? (
-        <Dashboard className="dashboard" code={code} />
-      ) : (
-        <Login className="login" />
-      )}
+      <div className="spotify">
+        {code ? (
+          <Dashboard className="dashboard" code={code} />
+        ) : (
+          <Login className="login" />
+        )}
+      </div>
     </div>
   )
 }

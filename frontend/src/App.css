@@ -8,9 +8,9 @@
   height: 100vh;
 }
 
-.login {
-  /* position: absolute;
-  top: 0px;
-  left: 0px; */
+.spotify {
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 10;
 }
