@@ -1,32 +1,53 @@
-import "./App.css"
-import ReactDOM from "react-dom"
-import React, { useRef, useState, Suspense } from "react"
-import { Canvas, useFrame } from "@react-three/fiber"
-import { Environment, OrbitControls } from "@react-three/drei"
+import "./App.css";
+import ReactDOM from "react-dom";
+import React, { Suspense, useLayoutEffect, useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import {
+  OrbitControls,
+  PerspectiveCamera,
+  ContactShadows,
+  Environment,
+  Stage,
+} from "@react-three/drei";
+
+/** State management */
 
 /** ThreeJS */
-import Lights from "./components/Lights"
+import Lights from "./components/Lights";
 // Load turntable 3D model
-import Turntable from "./components/Turntable"
-
+import Turntable from "./components/Turntable";
 // Component Imports
-import Login from "./Login"
-import Dashboard from "./Dashboard"
+import Login from "./Login";
+import Dashboard from "./Dashboard";
 
-import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/css/bootstrap.min.css";
 
 // Grab Spotify Auth code from the URL
-const code = new URLSearchParams(window.location.search).get("code")
+const code = new URLSearchParams(window.location.search).get("code");
 
 const App = () => {
+  const ref = useRef();
+
   return (
     <div className="App">
-      <Canvas className="canvas">
-        <Lights />
+      <Canvas className="canvas" shadowMap>
+        <color attach="background" args={["#171717"]} />
         <Suspense fallback={null}>
-          <Turntable />
-          <Environment preset="apartment" background />
+          <Stage
+            contactShadow
+            shadows
+            adjustCamera
+            environment="studio"
+            intensity={0.0000001}
+          >
+            <Turntable rotation={[0, Math.PI * 0.1, 0]} />
+          </Stage>
+
+          {/* <Environment preset="sunset" background /> */}
         </Suspense>
+
+        {/*<Lights />*/}
+        <OrbitControls ref={ref} preset autoRotate />
       </Canvas>
       <div className="spotify">
         {code ? (
@@ -36,7 +57,7 @@ const App = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

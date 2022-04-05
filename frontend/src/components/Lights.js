@@ -1,13 +1,13 @@
-import React from "react"
+import React from "react";
 
 const Lights = () => {
   return (
     <>
-      <fog attach="fog" args={["#fff", 0, 22]} />
-      <ambientLight />
-      <pointLight position={[10, 10, 10]} />
+      <ambientLight intensity={0.5} position={[2, 2, 2]} />
+      <spotLight intensity={0.3} position={[5, 20, 20]} />
+      <pointLight intensity={0.5} position={[0, 10, 0]} />
     </>
-  )
-}
+  );
+};
 
-export default Lights
+export default Lights;

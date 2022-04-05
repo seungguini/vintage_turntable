@@ -7,25 +7,16 @@ import { useGLTF, useAnimations } from "@react-three/drei"
 
 export default function Turntable(props) {
   const group = useRef()
-  const { nodes, materials, animations } = useGLTF("/turntable.glb")
+  const turntable = useGLTF("/turntable.glb")
+  const { nodes, materials, animations } = turntable
+  console.log(turntable)
   const { actions } = useAnimations(animations, group)
+
+  console.log(turntable)
+
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
-        <group name="Floor_Reference" position={[0.04, 0, 0]} />
-        <group
-          name="Wall_Reference"
-          position={[0.04, 1.64, -3.3]}
-          rotation={[1.6, 0, -3.11]}
-        />
-        <mesh
-          name="Floor"
-          castShadow
-          receiveShadow
-          geometry={nodes.Floor.geometry}
-          material={materials.Floor}
-          position={[0.04, -0.23, -4.48]}
-        />
         <group name="Plinth" position={[-0.62, 0, -0.86]}>
           <mesh
             name="Cube"
