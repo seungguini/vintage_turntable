@@ -1,6 +1,6 @@
 import "./App.css";
 import ReactDOM from "react-dom";
-import React, { Suspense, useLayoutEffect, useRef } from "react";
+import React, { Suspense, useEffect, useLayoutEffect, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import {
   OrbitControls,
@@ -27,7 +27,6 @@ const code = new URLSearchParams(window.location.search).get("code");
 
 const App = () => {
   const ref = useRef();
-
   return (
     <div className="App">
       <Canvas className="canvas" shadowMap>
@@ -38,7 +37,7 @@ const App = () => {
             shadows
             adjustCamera
             environment="studio"
-            intensity={0.0000001}
+            intensity={0}
           >
             <Turntable rotation={[0, Math.PI * 0.1, 0]} />
           </Stage>
@@ -47,7 +46,7 @@ const App = () => {
         </Suspense>
 
         {/*<Lights />*/}
-        <OrbitControls ref={ref} preset autoRotate />
+        <OrbitControls ref={ref} preset />
       </Canvas>
       <div className="spotify">
         {code ? (
