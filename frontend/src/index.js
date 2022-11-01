@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
 import "./App.css";
 import App from "./App";
 // import { Leva } from "leva";
