@@ -10,11 +10,13 @@ import { useFrame } from "@react-three/fiber";
 
 export default function Turntable({
   setHovering,
+  hovering,
   focused,
   setFocused,
   scale,
   rotation,
   position,
+  playing,
 }) {
   const group = useRef();
   const modelLocation = "/models/turntable.glb";
@@ -22,24 +24,32 @@ export default function Turntable({
   const { nodes, materials, animations } = turntable;
   console.log(turntable);
   const { actions } = useAnimations(animations, group);
-
   // Animations
+  useEffect(() => {
+    const toneArmAction = actions["Tone ArmAction.003"];
+
+    toneArmAction.setLoop(THREE.LoopOnce);
+    toneArmAction.paused = true;
+    toneArmAction.clampWhenFinished = true;
+    toneArmAction.play();
+  });
 
   useEffect(() => {
     const toneArmAction = actions["Tone ArmAction.003"];
-    console.log("TONE ARM ACTION");
-    console.log(toneArmAction);
-    toneArmAction.setLoop(THREE.LoopPingPong);
-    toneArmAction.play();
 
-    actions["Tone ArmAction.003"].play();
-  }, []);
+    if (playing) {
+      toneArmAction.paused = false;
+    } else {
+    }
+  }, [playing]);
+
+  useEffect(() => {
+    document.body.style.cursor = hovering ? "pointer" : "auto"; // change pointer to finger when hovered
+  }, [hovering]);
 
   // Event handler when hovering over Turntable
   const turntableHoverEnter = () => {
     console.log("Hovering over turntable");
-    const toneArmAction = actions["Tone ArmAction.003"];
-    toneArmAction.stop();
 
     // Set state
     setHovering(true);
@@ -47,10 +57,6 @@ export default function Turntable({
 
   const turntableHoverLeave = () => {
     console.log("Leaving turntable hover");
-    const toneArmAction = actions["Tone ArmAction.003"];
-    toneArmAction.setLoop(THREE.LoopPingPong);
-    toneArmAction.play();
-
     setHovering(false);
   };
 
