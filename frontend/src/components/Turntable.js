@@ -28,18 +28,24 @@ export default function Turntable({
   useEffect(() => {
     const toneArmAction = actions["Tone ArmAction.003"];
 
-    toneArmAction.setLoop(THREE.LoopOnce);
-    toneArmAction.paused = true;
     toneArmAction.clampWhenFinished = true;
+    toneArmAction.paused = true;
+    toneArmAction.timeScale = 1;
+    toneArmAction.setLoop(THREE.LoopOnce, 1);
     toneArmAction.play();
-  });
+  }, []);
 
   useEffect(() => {
     const toneArmAction = actions["Tone ArmAction.003"];
 
     if (playing) {
+      toneArmAction.setEffectiveTimeScale(1);
       toneArmAction.paused = false;
+      toneArmAction.clampWhenFinished = true;
     } else {
+      toneArmAction.setEffectiveTimeScale(-1);
+      toneArmAction.paused = false;
+      toneArmAction.clampWhenFinished = true;
     }
   }, [playing]);
 
