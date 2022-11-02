@@ -17,6 +17,7 @@ export default function Turntable({
   rotation,
   position,
   playing,
+  setToneArmFinished,
 }) {
   const group = useRef();
   const modelLocation = "/models/turntable.glb";
@@ -25,6 +26,7 @@ export default function Turntable({
   console.log(turntable);
   const { actions } = useAnimations(animations, group);
   // Animations
+
   useEffect(() => {
     const toneArmAction = actions["Tone ArmAction.003"];
 
@@ -36,8 +38,9 @@ export default function Turntable({
   }, []);
 
   useEffect(() => {
+    setToneArmFinished(false);
     const toneArmAction = actions["Tone ArmAction.003"];
-
+    console.log(toneArmAction);
     if (playing) {
       toneArmAction.setEffectiveTimeScale(1);
       toneArmAction.paused = false;
@@ -47,6 +50,10 @@ export default function Turntable({
       toneArmAction.paused = false;
       toneArmAction.clampWhenFinished = true;
     }
+
+    toneArmAction._mixer.addEventListener("finished", () => {
+      setToneArmFinished(true);
+    });
   }, [playing]);
 
   useEffect(() => {

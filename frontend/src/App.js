@@ -1,6 +1,6 @@
 import "./App.css";
 import ReactDOM from "react-dom";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import {
   ContactShadows,
@@ -18,6 +18,7 @@ import {
   useChain,
   config,
 } from "@react-spring/three";
+import * as THREE from "three";
 
 // Load turntable 3D model
 import Turntable from "./components/Turntable";
@@ -25,6 +26,8 @@ import Camera from "./components/Camera";
 import Words from "./components/Words";
 
 import Buttons from "./components/Buttons";
+import { Track } from "./components/Track";
+const audio = new Audio("/songs/Daylight.mp3");
 
 const Scene = () => {
   // States
@@ -33,17 +36,35 @@ const Scene = () => {
   const [focused, setFocused] = useState(false); // If Turntable is clicked
   const [playing, setPlaying] = useState(false);
   const [soundOn, setSoundOn] = useState(false);
+  const [toneArmFinished, setToneArmFinished] = useState(false);
+
+  // AUDIO
+
+  useEffect(() => {
+    if (!playing) {
+      console.log("PAUSING AUDIO");
+      audio.pause();
+    }
+  }, [playing]);
+
+  useEffect(() => {
+    if (playing & toneArmFinished) {
+      console.log("Play button hit + tone arm moved");
+      audio.play();
+    }
+  }, [toneArmFinished]);
+
   // ANIMATIONS
 
   // Camera animation
 
   const cameraIntroDuration = 5000;
 
-  const { camera, mouse } = useThree();
-
   const [enableLookAt, setEnableLookAt] = useState(true);
 
   const cameraMoveRef = useSpringRef();
+
+  const { camera, mouse } = useThree();
 
   const { position } = useSpring({
     from: {
@@ -104,11 +125,6 @@ const Scene = () => {
 
   // JSX
 
-  useEffect(() => {
-    console.log("playing is");
-    console.log(playing);
-  }, [playing]);
-
   return (
     <>
       <Camera
@@ -140,6 +156,7 @@ const Scene = () => {
         rotation={ttRotationSpring.rotation}
         position={ttPositionSpring.position}
         playing={playing}
+        setToneArmFinished={setToneArmFinished}
       />
       <Words opacity={opacity} />
       <Buttons

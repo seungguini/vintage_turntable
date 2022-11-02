@@ -3,11 +3,12 @@
 import { animated, useSpring } from "@react-spring/three";
 import { useFBX, useGLTF } from "@react-three/drei";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Button({
   scaleNormal,
   scalePressed,
+  hoveringScale,
   springConfig,
   switchButton,
   modelPath1,
@@ -39,7 +40,7 @@ export default function Button({
   };
 
   const { scale } = useSpring({
-    scale: !pressed ? scaleNormal : scalePressed,
+    scale: !pressed ? (!hovering ? scaleNormal : hoveringScale) : scalePressed,
     config: springConfig,
   });
 
