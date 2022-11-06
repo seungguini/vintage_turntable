@@ -79,6 +79,7 @@ const Scene = () => {
   const { camera, mouse } = useThree();
 
   const { position } = useSpring({
+    // react-spring
     from: {
       position: [15, 6, 10],
     },
