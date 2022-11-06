@@ -26,7 +26,7 @@ const PrevButton = (props) => {
 
 useGLTF.preload("/prev_button.glb");
 
-export default function Buttons({ playing, setPlaying, soundOn, setSoundOn }) {
+export default function Buttons({ playing, setPlaying, soundOn, setLol }) {
   const scaleNormal = 0.03;
   const scalePressed = 0.025;
   const hoveringScale = 0.032;
@@ -35,33 +35,17 @@ export default function Buttons({ playing, setPlaying, soundOn, setSoundOn }) {
   // Additional unclick handler for play button
   const playUnclickHandler = ({ setPlaying, playing }) => {
     setPlaying(!playing);
+    console.log("setting play option");
   };
 
   // Additional unclick handler for sound button
-  const soundUnclickHandler = ({ setSoundOn, soundOn }) => {
-    setSoundOn(!soundOn);
+  const soundUnclickHandler = ({ setLol, soundOn }) => {
+    // setLol(!soundOn);
+    console.log("setting sound option");
   };
 
   return (
     <>
-      <Button
-        id="playPauseButton"
-        scaleNormal={scaleNormal}
-        scalePressed={scalePressed}
-        hoveringScale={hoveringScale}
-        springConfig={springConfig}
-        switchButton={true}
-        modelPath1={"/models/buttons/play_button.glb"}
-        modelPath2={"/models/buttons/pause_button.glb"}
-        position={[0, -1, 4]}
-        rotation={[0.5, 0.5, -0.25]}
-        onPointerUp={() => {
-          console.log("POINTR UP PLAYYYY");
-          setPlaying(!playing);
-        }}
-        additionalUnclickHandler={playUnclickHandler}
-        additionalUnclickHandlerConfigs={{ setPlaying, playing }}
-      />
       <Button
         id="soundOnOffButton"
         scaleNormal={scaleNormal}
@@ -73,8 +57,24 @@ export default function Buttons({ playing, setPlaying, soundOn, setSoundOn }) {
         modelPath2={"/models/buttons/soundoff_button.glb"}
         position={[2, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
-        onPointerUp={() => setSoundOn(!soundOn)}
+        additionalUnclickHandler={soundUnclickHandler}
+        additionalUnclickHandlerConfigs={(setLol, soundOn)}
       />
+      <Button
+        id="playPauseButton"
+        scaleNormal={scaleNormal}
+        scalePressed={scalePressed}
+        hoveringScale={hoveringScale}
+        springConfig={springConfig}
+        switchButton={true}
+        modelPath1={"/models/buttons/play_button.glb"}
+        modelPath2={"/models/buttons/pause_button.glb"}
+        position={[0, -1, 4]}
+        rotation={[0.5, 0.5, -0.25]}
+        additionalUnclickHandler={playUnclickHandler}
+        additionalUnclickHandlerConfigs={{ setPlaying, playing }}
+      />
+
       <Button
         id="nextButton"
         scaleNormal={scaleNormal}

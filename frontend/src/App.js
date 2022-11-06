@@ -6,19 +6,9 @@ import {
   ContactShadows,
   Environment,
   Float,
-  PresentationControls,
   Sparkles,
-  Text3D,
 } from "@react-three/drei";
-import {
-  useSpring,
-  animated,
-  easings,
-  useSpringRef,
-  useChain,
-  config,
-} from "@react-spring/three";
-import * as THREE from "three";
+import { useSpring, easings, useSpringRef } from "@react-spring/three";
 
 // Load turntable 3D model
 import Turntable from "./components/Turntable";
@@ -26,8 +16,13 @@ import Camera from "./components/Camera";
 import Words from "./components/Words";
 
 import Buttons from "./components/Buttons";
-import { Track } from "./components/Track";
-const audio = new Audio("/songs/Daylight.mp3");
+const song = new Audio("/songs/Daylight.mp3");
+song.volume = 0.01;
+const toneArmOnSoundeffect = new Audio("/soundeffects/tonearm_on_sound.mp3");
+toneArmOnSoundeffect.volume = 0.4;
+const vinylSoundeffect = new Audio("/soundeffects/vinyl_soundeffect.mp3");
+vinylSoundeffect.volume = 1;
+vinylSoundeffect.loop = true;
 
 const Scene = () => {
   // States
@@ -35,7 +30,7 @@ const Scene = () => {
   const [hovering, setHovering] = useState(false);
   const [focused, setFocused] = useState(false); // If Turntable is clicked
   const [playing, setPlaying] = useState(false);
-  const [soundOn, setSoundOn] = useState(false);
+  const [soundOn, setSoundOn] = useState(true);
   const [toneArmFinished, setToneArmFinished] = useState(false);
 
   // AUDIO
@@ -43,16 +38,33 @@ const Scene = () => {
   useEffect(() => {
     if (!playing) {
       console.log("PAUSING AUDIO");
-      audio.pause();
+      song.pause();
+      toneArmOnSoundeffect.play();
+
+      vinylSoundeffect.pause();
     }
   }, [playing]);
 
   useEffect(() => {
     if (playing & toneArmFinished) {
       console.log("Play button hit + tone arm moved");
-      audio.play();
+      toneArmOnSoundeffect.play();
+      vinylSoundeffect.play();
+      song.play();
     }
   }, [toneArmFinished]);
+
+  useEffect(() => {
+    console.log("sound on");
+    console.log(soundOn);
+    if (!soundOn) {
+      toneArmOnSoundeffect.volume = 0;
+      song.volume = 0;
+    } else {
+      toneArmOnSoundeffect.volume = 1;
+      song.volume = 0.08;
+    }
+  }, [soundOn]);
 
   // ANIMATIONS
 
@@ -87,7 +99,7 @@ const Scene = () => {
 
   // Once clicked, zoom-in mode for turntable
   const ttScaleSpring = useSpring({
-    scale: hovering & !focused ? 1.05 : 1,
+    scale: hovering & !focused ? 1.35 : 1.3,
     // scale: 10,
   });
 
@@ -146,24 +158,31 @@ const Scene = () => {
         castShadow
         intensity={2}
       />
-      <Sparkles count={1000} scale={25} size={1.5} />
-      <Turntable
-        hovering={hovering}
-        setHovering={setHovering}
-        focused={focused}
-        setFocused={setFocused}
-        scale={ttScaleSpring.scale}
-        rotation={ttRotationSpring.rotation}
-        position={ttPositionSpring.position}
-        playing={playing}
-        setToneArmFinished={setToneArmFinished}
-      />
-      <Words opacity={opacity} />
+      <Sparkles count={2000} scale={25} size={2} />
+      <Float
+        speed={1} // Animation speed, defaults to 1
+        rotationIntensity={1.5} // XYZ rotation intensity, defaults to 1
+        floatIntensity={1.5} // Up/down float intensity, works like a multiplier with floatingRange,defaults to 1
+        floatingRange={[-0.2, 0.2]} // Range of y-axis values the object will float within, defaults to [-0.1,0.1]
+      >
+        <Turntable
+          hovering={hovering}
+          setHovering={setHovering}
+          focused={focused}
+          setFocused={setFocused}
+          scale={ttScaleSpring.scale}
+          rotation={ttRotationSpring.rotation}
+          position={ttPositionSpring.position}
+          playing={playing}
+          setToneArmFinished={setToneArmFinished}
+        />
+      </Float>
+      {/* <Words opacity={opacity} /> */}
       <Buttons
         playing={playing}
         setPlaying={setPlaying}
         soundOn={soundOn}
-        setSoundOn={setSoundOn}
+        setLol={setSoundOn}
       />
 
       <ContactShadows
