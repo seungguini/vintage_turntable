@@ -1,5 +1,15 @@
 # Compiled source #
 ###################
+
+# Static resources. Non-public for copyright reasons.
+# If you'd like to collaborate, please leaave a GitHub Issue to receive these resources.
+covers/
+fonts/
+models/
+songs/
+soundeffects/
+textures/
+
 *.com
 *.class
 *.dll
