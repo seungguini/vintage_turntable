@@ -1,3 +1,10 @@
+covers/
+fonts/
+models/
+songs/
+soundeffects/
+textures/
+
 # Compiled source #
 ###################
 
@@ -140,3 +147,5 @@ typings/
 /venv
 data.json
 *.pkl
+# Local Netlify folder
+.netlify
