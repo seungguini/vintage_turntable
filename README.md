@@ -1,5 +1,7 @@
 # Vintage turntable
 
+<img src="https://media.giphy.com/media/82eRsCO38zY7EyQDK5/giphy.gif" />
+
 A 3-dimensional record player simulator with various audio integrations, including [Spotify](https://open.spotify.com/). Made with [React Three Fiber](https://github.com/pmndrs/react-three-fiber), [react-spring](https://react-spring.dev/) and [Blender](https://www.blender.org/).
 
 ## Getting Started
