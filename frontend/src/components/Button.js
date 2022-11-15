@@ -11,6 +11,7 @@ export default function Button({
   hoveringScale,
   springConfig,
   switchButton,
+  setSwitchButton,
   modelPath1,
   modelPath2, // Optional
   position,
@@ -20,7 +21,6 @@ export default function Button({
 }) {
   const [pressed, setPressed] = useState(false);
   const [hovering, setHovering] = useState(false);
-  const [showModel1, setShowModel1] = useState(true);
   let model1 = useGLTF(modelPath1).scene;
   let model2 = useGLTF(modelPath2).scene;
 
@@ -30,9 +30,8 @@ export default function Button({
 
   const unclickHandler = () => {
     setPressed(false);
-    if (switchButton) {
-      setShowModel1(!showModel1);
-    }
+
+    if (setSwitchButton) setSwitchButton(!switchButton);
 
     if (additionalUnclickHandler) {
       additionalUnclickHandler(additionalUnclickHandlerConfigs);
@@ -53,7 +52,7 @@ export default function Button({
       position={position}
       rotation={rotation}
       scale={scale}
-      object={switchButton ? (showModel1 ? model1 : model2) : model1}
+      object={switchButton ? model1 : model2}
       onPointerDown={clickHandler}
       onPointerUp={unclickHandler}
       onPointerEnter={() => setHovering(true)}
