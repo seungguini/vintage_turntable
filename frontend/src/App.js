@@ -1,7 +1,7 @@
 import "./App.css";
-import ReactDOM from "react-dom";
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
+
 import {
   ContactShadows,
   Environment,
@@ -16,13 +16,16 @@ import Camera from "./components/Camera";
 import Words from "./components/Words";
 
 import Buttons from "./components/Buttons";
-const song = new Audio("/songs/Daylight.mp3");
-song.volume = 0.01;
-const toneArmOnSoundeffect = new Audio("/soundeffects/tonearm_on_sound.mp3");
-toneArmOnSoundeffect.volume = 0.4;
-const vinylSoundeffect = new Audio("/soundeffects/vinyl_soundeffect.mp3");
-vinylSoundeffect.volume = 1;
-vinylSoundeffect.loop = true;
+import Song from "./components/Song";
+import Lights from "./components/Lights";
+
+// let song = new Audio("/songs/Daylight.mp3");
+// song.volume = 0.01;
+// const toneArmOnSoundeffect = new Audio("/soundeffects/tonearm_on_sound.mp3");
+// toneArmOnSoundeffect.volume = 0.4;
+// const vinylSoundeffect = new Audio("/soundeffects/vinyl_soundeffect.mp3");
+// vinylSoundeffect.volume = 1;
+// vinylSoundeffect.loop = true;
 
 const Scene = () => {
   // States
@@ -32,46 +35,18 @@ const Scene = () => {
   const [playing, setPlaying] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [toneArmFinished, setToneArmFinished] = useState(false);
+  // Songs
 
   // AUDIO
 
-  useEffect(() => {
-    if (!playing) {
-      console.log("PAUSING AUDIO");
-      song.pause();
-      toneArmOnSoundeffect.play();
-
-      vinylSoundeffect.pause();
-    }
-  }, [playing]);
-
-  useEffect(() => {
-    if (playing & toneArmFinished) {
-      console.log("Play button hit + tone arm moved");
-      toneArmOnSoundeffect.play();
-      vinylSoundeffect.play();
-      song.play();
-    }
-  }, [toneArmFinished]);
-
-  useEffect(() => {
-    console.log("sound on");
-    console.log(soundOn);
-    if (!soundOn) {
-      toneArmOnSoundeffect.volume = 0;
-      song.volume = 0;
-    } else {
-      toneArmOnSoundeffect.volume = 1;
-      song.volume = 0.08;
-    }
-  }, [soundOn]);
+  // Skip Song
 
   // ANIMATIONS
 
   // Camera animation
 
   const cameraIntroDuration = 5000;
-
+  const [songIndex, setSongIndex] = useState(0);
   const [enableLookAt, setEnableLookAt] = useState(true);
 
   const cameraMoveRef = useSpringRef();
@@ -98,44 +73,6 @@ const Scene = () => {
 
   // Turntable animations
 
-  // Once clicked, zoom-in mode for turntable
-  const ttScaleSpring = useSpring({
-    scale: hovering & !focused ? 1.35 : 1.3,
-    // scale: 10,
-  });
-
-  const zoomConfig = {
-    duration: 500,
-    easing: easings.easeInOutSine,
-  };
-
-  const ttRotationSpring = useSpring({
-    rotation: !focused ? [0.5, 0.5, -0.25] : [Math.PI * 0.5, 0, 0],
-    config: zoomConfig,
-  });
-
-  const ttPositionSpring = useSpring({
-    position: !focused ? [0, -0.24, 0] : [0, 0, 6],
-    config: zoomConfig,
-  });
-
-  // Word animations
-
-  const { opacity } = useSpring({
-    loop: { reverse: true },
-
-    from: { opacity: 0 },
-    to: { opacity: !focused ? 1 : 0 },
-    config: {
-      duration: 2000,
-      easing: easings.easeInOutSine,
-    },
-    // delay: cameraIntroDuration,
-    delay: 500,
-
-    // ref: wordsOpacityRef,
-  });
-
   // JSX
 
   return (
@@ -150,16 +87,15 @@ const Scene = () => {
         position={position}
         focused={focused}
       />
-      <ambientLight intensity={0.3} />
-      <spotLight
-        position={[10, 10, 10]}
-        angle={0.15}
-        penumbra={1}
-        shadow-mapSize={[512, 512]}
-        castShadow
-        intensity={2}
-      />
+      <Lights />
       <Sparkles count={2000} scale={25} size={2} />
+      <Song
+        playing={playing}
+        setPlaying={setPlaying}
+        toneArmFinished={toneArmFinished}
+        soundOn={soundOn}
+        songIndex={songIndex}
+      />
       <Float
         speed={1} // Animation speed, defaults to 1
         rotationIntensity={1.5} // XYZ rotation intensity, defaults to 1
@@ -171,9 +107,6 @@ const Scene = () => {
           setHovering={setHovering}
           focused={focused}
           setFocused={setFocused}
-          scale={ttScaleSpring.scale}
-          rotation={ttRotationSpring.rotation}
-          position={ttPositionSpring.position}
           playing={playing}
           setToneArmFinished={setToneArmFinished}
         />
@@ -183,16 +116,11 @@ const Scene = () => {
         playing={playing}
         setPlaying={setPlaying}
         soundOn={soundOn}
-        setLol={setSoundOn}
+        setSoundOn={setSoundOn}
+        songIndex={songIndex}
+        setSongIndex={setSongIndex}
       />
 
-      <ContactShadows
-        position={[0, -1.4, 0]}
-        opacity={1}
-        scale={50}
-        blur={1}
-        far={4}
-      />
       <Environment preset="studio" />
       {/* <Environment preset="sunset" background /> */}
       {/*<Lights />*/}

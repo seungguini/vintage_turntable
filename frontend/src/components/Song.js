@@ -17,7 +17,7 @@ export default function Song({
   soundOn,
   songIndex,
 }) {
-  const x = -1.7;
+  const x = -3.7;
   const y = 2.2;
   const z = 4;
 
@@ -131,7 +131,7 @@ export default function Song({
         size={0.1}
         height={0.065}
         curveSegments={12}
-        position={[x, y, z]}
+        position={[x, y - 0.3, z]}
         rotation={[0.5, 0.5, -0.25]}
 
         // rotation={[0, -0.35, -0.05]}

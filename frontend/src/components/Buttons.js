@@ -18,6 +18,7 @@ export default function Buttons({
   songIndex,
   setSongIndex,
 }) {
+  const numSongs = 5;
   const scaleNormal = 0.03;
   const scalePressed = 0.025;
   const hoveringScale = 0.032;
@@ -75,7 +76,11 @@ export default function Buttons({
         position={[1, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
         additionalUnclickHandler={() => {
-          setSongIndex(songIndex + 1);
+          if (songIndex == numSongs) {
+            setSongIndex(0); // Allows songIndex to loop
+          } else {
+            setSongIndex(songIndex + 1);
+          }
         }}
       />
       <Button
@@ -89,7 +94,11 @@ export default function Buttons({
         position={[-1, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
         additionalUnclickHandler={() => {
-          setSongIndex(songIndex - 1);
+          if (songIndex == 0) {
+            setSongIndex(numSongs); // Allows songIndex to loop
+          } else {
+            setSongIndex(songIndex - 1);
+          }
         }}
       />
       <Button
