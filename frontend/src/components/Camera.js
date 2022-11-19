@@ -1,5 +1,5 @@
-import { animated } from "@react-spring/three";
-import { PerspectiveCamera } from "@react-three/drei";
+import { animated, easings, useSpring } from "@react-spring/three";
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import React, { useRef, useState } from "react";
 import * as THREE from "three";
@@ -10,7 +10,6 @@ const Camera = ({
   setEnableLookAt,
   camera,
   mouse,
-  position,
   focused,
 }) => {
   const ref = useRef();
@@ -20,6 +19,23 @@ const Camera = ({
   let lookAtFlag = true;
 
   const cameraMovementScale = 2;
+
+  const { position } = useSpring({
+    // react-spring
+    from: {
+      position: [15, 6, 10],
+    },
+    to: {
+      position: [0, 0, 8],
+    },
+    config: {
+      duration: 5000,
+      easing: easings.easeInOutSine,
+    },
+    onResolve: () => {
+      setEnableLookAt(false); // Disable lookat so camera can follow mouse
+    },
+  });
 
   useFrame(() => {
     if (!focused) {
@@ -68,6 +84,7 @@ const Camera = ({
 
   return (
     <>
+      {/* <OrbitControls /> */}
       <AnimatedPerspectiveCamera
         ref={ref}
         makeDefault

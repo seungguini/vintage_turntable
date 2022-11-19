@@ -35,41 +35,18 @@ const Scene = () => {
   const [playing, setPlaying] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [toneArmFinished, setToneArmFinished] = useState(false);
-  // Songs
+  const coverPicUrls = ["Aiguille.jpg", "CanaryForest.jpg", "Sworn.jpg"];
+  const [coverPicUrl, setCoverPicUrl] = useState("Aiguille.jpg");
 
-  // AUDIO
-
-  // Skip Song
-
-  // ANIMATIONS
-
-  // Camera animation
-
-  const cameraIntroDuration = 5000;
   const [songIndex, setSongIndex] = useState(0);
   const [enableLookAt, setEnableLookAt] = useState(true);
 
-  const cameraMoveRef = useSpringRef();
-
   const { camera, mouse } = useThree();
 
-  const { position } = useSpring({
-    // react-spring
-    from: {
-      position: [15, 6, 10],
-    },
-    to: {
-      position: [0, 0, 8],
-    },
-    config: {
-      duration: 5000,
-      easing: easings.easeInOutSine,
-    },
-    onResolve: () => {
-      setEnableLookAt(false); // Disable lookat so camera can follow mouse
-    },
-    ref: cameraMoveRef,
-  });
+  useEffect(() => {
+    console.log("Updating cover pic!");
+    setCoverPicUrl(coverPicUrls[songIndex % 3]);
+  }, [songIndex]);
 
   // Turntable animations
 
@@ -84,7 +61,6 @@ const Scene = () => {
         mouse={mouse}
         enableLookAt={enableLookAt}
         setEnableLookAt={setEnableLookAt}
-        position={position}
         focused={focused}
       />
       <Lights />
@@ -109,6 +85,7 @@ const Scene = () => {
           setFocused={setFocused}
           playing={playing}
           setToneArmFinished={setToneArmFinished}
+          coverPicUrl={coverPicUrl}
         />
       </Float>
       {/* <Words opacity={opacity} /> */}
