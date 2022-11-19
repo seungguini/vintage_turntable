@@ -1,5 +1,9 @@
 import { animated, easings, useSpring } from "@react-spring/three";
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import {
+  FlyControls,
+  OrbitControls,
+  PerspectiveCamera,
+} from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import React, { useRef, useState } from "react";
 import * as THREE from "three";
@@ -18,7 +22,7 @@ const Camera = ({
 
   let lookAtFlag = true;
 
-  const cameraMovementScale = 2;
+  const cameraMovementScale = 0.7;
 
   const { position } = useSpring({
     // react-spring
@@ -26,7 +30,7 @@ const Camera = ({
       position: [15, 6, 10],
     },
     to: {
-      position: [0, 0, 8],
+      position: [0, 0, 9],
     },
     config: {
       duration: 5000,

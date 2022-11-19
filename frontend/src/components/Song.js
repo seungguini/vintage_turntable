@@ -17,8 +17,8 @@ export default function Song({
   soundOn,
   songIndex,
 }) {
-  const x = -3.7;
-  const y = 2.2;
+  const x = -3.2;
+  const y = 1.4;
   const z = 4;
 
   const [songs, setSongs] = useState(data()); // List of songs

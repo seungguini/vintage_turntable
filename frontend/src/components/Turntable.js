@@ -23,6 +23,7 @@ export default function Turntable({
   focused,
   setFocused,
   playing,
+  toneArmFinished,
   setToneArmFinished,
 }) {
   const group = useRef();
@@ -34,27 +35,6 @@ export default function Turntable({
 
   const { actions } = useAnimations(animations, group);
   // Animations
-
-  const zoomConfig = {
-    duration: 500,
-    easing: easings.easeInOutSine,
-  };
-
-  const { rotation } = useSpring({
-    rotation: !focused ? [0.5, 0.5, -0.25] : [Math.PI * 0.5, 0, 0],
-    config: zoomConfig,
-  });
-
-  const { position } = useSpring({
-    position: !focused ? [0, -0.24, 0] : [0, 0, 6],
-    config: zoomConfig,
-  });
-
-  // Once clicked, zoom-in mode for turntable
-  const { scale } = useSpring({
-    scale: hovering & !focused ? 1.35 : 1.3,
-    // scale: 10,
-  });
 
   useEffect(() => {
     const toneArmAction = actions["Tone ArmAction.003"];
@@ -88,30 +68,18 @@ export default function Turntable({
     // document.body.style.cursor = hovering ? "pointer" : "auto"; // change pointer to finger when hovered
   }, [hovering]);
 
-  // Event handler when hovering over Turntable
-  const turntableHoverEnter = () => {
-    // Set state
-    setHovering(true);
-  };
-
-  const turntableHoverLeave = () => {
-    setHovering(false);
-  };
-
-  const turntableClick = () => {
-    setFocused(true);
-  };
-
-  const turntableMiss = () => {
-    setFocused(false);
-  };
-
   // Album Cover
   const colorMap = useLoader(THREE.TextureLoader, "/covers/" + coverPicUrl);
   colorMap.flipY = false;
   colorMap.repeat.set(1, 1);
 
-  const albumScale = 1;
+  useFrame(() => {
+    if (playing) recordRef.current.rotation.z += 0.003;
+  });
+
+  useEffect(() => {
+    recordRef.current.rotation.z = 0;
+  }, [coverPicUrl]);
   return (
     <>
       <Circle
