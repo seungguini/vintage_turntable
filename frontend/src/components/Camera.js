@@ -5,7 +5,7 @@ import {
   PerspectiveCamera,
 } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 const Camera = ({
@@ -15,6 +15,7 @@ const Camera = ({
   camera,
   mouse,
   focused,
+  seeMenu,
 }) => {
   const ref = useRef();
 
@@ -41,8 +42,17 @@ const Camera = ({
     },
   });
 
+  // Animate camera to menu location
+  const menuPositionSpring = useSpring({
+    position: !seeMenu ? [0, 0, 9] : [-7, 0, 20],
+    config: {
+      duration: 1500,
+      easing: easings.easeInOutSine,
+    },
+  });
+
   useFrame(() => {
-    if (!focused) {
+    if (!focused & !seeMenu) {
       camera.position.lerp(
         vec.set(
           mouse.x * cameraMovementScale,
@@ -93,7 +103,7 @@ const Camera = ({
         ref={ref}
         makeDefault
         fov={50}
-        position={position}
+        position={enableLookAt ? position : menuPositionSpring.position}
       />
     </>
   );

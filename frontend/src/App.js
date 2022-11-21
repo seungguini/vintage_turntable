@@ -18,6 +18,7 @@ import Words from "./components/Words";
 import Buttons from "./components/Buttons";
 import Song from "./components/Song";
 import Lights from "./components/Lights";
+import MenuButtons from "./components/MenuButtons";
 
 // let song = new Audio("/songs/Daylight.mp3");
 // song.volume = 0.01;
@@ -38,6 +39,7 @@ const Scene = () => {
   const coverPicUrls = ["Aiguille.jpg", "CanaryForest.jpg", "Sworn.jpg"];
   const [coverPicUrl, setCoverPicUrl] = useState("Aiguille.jpg");
 
+  const [seeMenu, setSeeMenu] = useState(false); // Menu mode
   const [songIndex, setSongIndex] = useState(0);
   const [enableLookAt, setEnableLookAt] = useState(true);
 
@@ -62,6 +64,7 @@ const Scene = () => {
         enableLookAt={enableLookAt}
         setEnableLookAt={setEnableLookAt}
         focused={focused}
+        seeMenu={seeMenu}
       />
       <Lights />
       <Sparkles count={2000} scale={25} size={2} />
@@ -91,13 +94,17 @@ const Scene = () => {
       </Float>
       {/* <Words opacity={opacity} /> */}
       <Buttons
+        position={[0, 0, 0]}
         playing={playing}
         setPlaying={setPlaying}
         soundOn={soundOn}
         setSoundOn={setSoundOn}
         songIndex={songIndex}
         setSongIndex={setSongIndex}
+        seeMenu={seeMenu}
+        setSeeMenu={setSeeMenu}
       />
+      <MenuButtons position={[-5, 0, 10]} />
 
       <Environment preset="studio" />
       {/* <Environment preset="sunset" background /> */}
