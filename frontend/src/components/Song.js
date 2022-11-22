@@ -3,7 +3,7 @@ import { Text, Text3D } from "@react-three/drei";
 import { animated, useSpring } from "@react-spring/three";
 import { v4 as uuidv4 } from "uuid";
 
-import data from "../utils";
+import songData from "../utils.js";
 const toneArmOnSoundeffect = new Audio("/soundeffects/tonearm_on_sound.mp3");
 toneArmOnSoundeffect.volume = 0.4;
 const vinylSoundeffect = new Audio("/soundeffects/vinyl_soundeffect.mp3");
@@ -21,7 +21,7 @@ export default function Song({
   const y = 1.4;
   const z = 4;
 
-  const [songs, setSongs] = useState(data()); // List of songs
+  const [songs, setSongs] = useState(songData); // List of songs
   const [currentSong, setCurrentSong] = useState({
     name: "Beaver Creek",
     cover:
@@ -98,16 +98,6 @@ export default function Song({
   });
   return (
     <>
-      {/* <audio ref={audioRef} src={currentSong.audio}></audio> */}
-      {/* <audio
-        ref={toneArmSoundRef}
-        src={process.env.PUBLIC_URL + "/soundeffects/tonearm_on_sound.mp3"}
-      ></audio> */}
-      {/* <audio
-        ref={vinylSoundRef}
-        src={process.env.PUBLIC_URL + "/soundeffects/vinyl_soundeffect.mp3"}
-      ></audio> */}
-
       <AnimatedText
         font={process.env.PUBLIC_URL + "/fonts/Roboto_Regular.json"}
         size={0.3}
@@ -115,8 +105,6 @@ export default function Song({
         curveSegments={12}
         position={[x, y, z]}
         rotation={[0.5, 0.5, -0.25]}
-
-        // rotation={[0, -0.35, -0.05]}
       >
         {currentSong.name}
         <animated.meshStandardMaterial
@@ -133,8 +121,6 @@ export default function Song({
         curveSegments={12}
         position={[x, y - 0.3, z]}
         rotation={[0.5, 0.5, -0.25]}
-
-        // rotation={[0, -0.35, -0.05]}
       >
         {currentSong.artist}
         <animated.meshStandardMaterial

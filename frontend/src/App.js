@@ -19,13 +19,7 @@ import Buttons from "./components/Buttons";
 import Song from "./components/Song";
 import Lights from "./components/Lights";
 
-// let song = new Audio("/songs/Daylight.mp3");
-// song.volume = 0.01;
-// const toneArmOnSoundeffect = new Audio("/soundeffects/tonearm_on_sound.mp3");
-// toneArmOnSoundeffect.volume = 0.4;
-// const vinylSoundeffect = new Audio("/soundeffects/vinyl_soundeffect.mp3");
-// vinylSoundeffect.volume = 1;
-// vinylSoundeffect.loop = true;
+const COVERPICSURLS = ["Aiguille.jpg", "CanaryForest.jpg", "Sworn.jpg"];
 
 const Scene = () => {
   // States
@@ -35,7 +29,6 @@ const Scene = () => {
   const [playing, setPlaying] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [toneArmFinished, setToneArmFinished] = useState(false);
-  const coverPicUrls = ["Aiguille.jpg", "CanaryForest.jpg", "Sworn.jpg"];
   const [coverPicUrl, setCoverPicUrl] = useState("Aiguille.jpg");
 
   const [songIndex, setSongIndex] = useState(0);
@@ -45,7 +38,7 @@ const Scene = () => {
 
   useEffect(() => {
     console.log("Updating cover pic!");
-    setCoverPicUrl(coverPicUrls[songIndex % 3]);
+    setCoverPicUrl(COVERPICSURLS[songIndex % 3]);
   }, [songIndex]);
 
   // Turntable animations

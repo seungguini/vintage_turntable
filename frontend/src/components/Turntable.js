@@ -176,18 +176,7 @@ export default function Turntable({
             position={[-0.33, -0.57, -0.52]}
             scale={0.97}
           />
-          {/* <mesh
-            ref={recordRef}
-            name="Record003"
-            castShadow
-            receiveShadow
-            geometry={nodes.Record003.geometry}
-            // material={materials["Album Inner"]}
-            position={[-0.33, 0.46, -0.52]}
-            scale={[0.67, 0.33, 0.67]}
-          >
-            <meshBasicMaterial map={colorMap} side={THREE.DoubleSide} />
-          </mesh> */}
+
           <mesh
             name="Arm_Top_Base"
             castShadow
