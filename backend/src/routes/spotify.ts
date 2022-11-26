@@ -21,10 +21,11 @@ router.get("/session", (req, res) => {
   
       res.status(500);
       res.send(`Cannot regenerate session ${err}`)
+    } else {
+      res.status(200);
+      res.send(req.session.id)
     }
 
-    res.status(200);
-    res.send(req.session.id)
   });
 
 })
@@ -40,10 +41,10 @@ router.delete("/session", (req, res) => {
 
       res.status(500);
       res.send(`Cannot delete session ${err}`)
+    } else {
+      res.status(200);
+      res.send(`Deleted Session ${sessionId}`);
     }
-
-    res.status(200);
-    res.send(`Deleted Session ${sessionId}`);
   })
 
 })
@@ -91,7 +92,7 @@ router.get('/callback', async (req, res)=> {
     const accessTokenResponse = await fetch(url, options);
 
     if (!accessTokenResponse.ok) {
-      res.send("Error with code response")
+      return res.send(`Error with code response: ${await accessTokenResponse.text()}`)
     }
 
     const body = await accessTokenResponse.json();
@@ -161,7 +162,7 @@ router.post('/refresh_token', async (req, res) => {
   const response = await fetch(url, options);
 
   if (!response.ok) {
-    res.send("Error with refresh");
+    return res.send(`Error with refresh: ${await response.text()}`);
   }
 
   const body = await response.json();
