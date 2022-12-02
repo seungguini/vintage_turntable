@@ -24,8 +24,6 @@ const COVERPICSURLS = ["Aiguille.jpg", "CanaryForest.jpg", "Sworn.jpg"];
 const Scene = () => {
   // States
   // const [turntablePosition, setTurntablePosition] = useState([0, -0.24, 0]);
-  const [hovering, setHovering] = useState(false);
-  const [focused, setFocused] = useState(false); // If Turntable is clicked
   const [playing, setPlaying] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [toneArmFinished, setToneArmFinished] = useState(false);
@@ -72,10 +70,6 @@ const Scene = () => {
         floatingRange={[-0.2, 0.2]} // Range of y-axis values the object will float within, defaults to [-0.1,0.1]
       >
         <Turntable
-          hovering={hovering}
-          setHovering={setHovering}
-          focused={focused}
-          setFocused={setFocused}
           playing={playing}
           toneArmFinished={toneArmFinished}
           setToneArmFinished={setToneArmFinished}
