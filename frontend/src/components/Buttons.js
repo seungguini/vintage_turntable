@@ -32,7 +32,7 @@ export default function Buttons({
   };
 
   return (
-    <group position={position}>
+    <group scale={0.3} position={position}>
       <Button
         id="soundOnOffButton"
         scaleNormal={scaleNormal}
@@ -113,7 +113,7 @@ export default function Buttons({
         position={[-1.85, -0.65, 4.5]}
         rotation={[Math.PI * 0.12, Math.PI * 0.16, -Math.PI * 0.08]}
         additionalUnclickHandler={() => {
-          setSeeMenu(!seeMenu);
+          setSeeMenu(true);
           // window.open("https://github.com/seungguini/vintage_turntable");
         }}
       />

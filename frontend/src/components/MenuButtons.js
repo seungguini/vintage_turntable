@@ -17,6 +17,7 @@ export default function MenuButtons({
   seeMenu,
   setSeeMenu,
   position,
+  rotation,
 }) {
   const springConfig = config.bouncy;
 
@@ -27,7 +28,7 @@ export default function MenuButtons({
   };
 
   return (
-    <group position={position}>
+    <group position={position} rotation={rotation}>
       <Button
         id="headphonesButton"
         scaleNormal={0.65}
@@ -41,7 +42,7 @@ export default function MenuButtons({
         position={[2, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
         additionalUnclickHandler={() => {
-          setSoundOn(!soundOn);
+          setSeeMenu(false);
         }}
       />
     </group>

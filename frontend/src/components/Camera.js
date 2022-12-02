@@ -21,8 +21,6 @@ const Camera = ({
 
   const vec = new THREE.Vector3();
 
-  let lookAtFlag = true;
-
   const cameraMovementScale = 0.7;
 
   const { position } = useSpring({
@@ -43,25 +41,30 @@ const Camera = ({
   });
 
   // Animate camera to menu location
-  const menuPositionSpring = useSpring({
-    position: !seeMenu ? [0, 0, 9] : [-7, 0, 20],
+  const menuRotationSpring = useSpring({
+    rotation: !seeMenu ? [0, 0, 0] : [0, -Math.PI * 0.5, 0],
     config: {
-      duration: 1500,
+      duration: 500,
       easing: easings.easeInOutSine,
     },
   });
 
+  useEffect(() => {
+    console.log("SEE MENU");
+    console.log(seeMenu);
+  }, [seeMenu]);
+
   useFrame(() => {
-    if (!focused & !seeMenu) {
-      camera.position.lerp(
-        vec.set(
-          mouse.x * cameraMovementScale,
-          mouse.y * cameraMovementScale,
-          camera.position.z
-        ),
-        0.02
-      );
-    }
+    // if (!focused & !seeMenu) {
+    //   camera.position.lerp(
+    //     vec.set(
+    //       mouse.x * cameraMovementScale,
+    //       mouse.y * cameraMovementScale,
+    //       camera.position.z
+    //     ),
+    //     0.007
+    //   );
+    // }
 
     if (enableLookAt) {
       camera.lookAt(
@@ -77,25 +80,6 @@ const Camera = ({
   // Animate initial camera movement
   const AnimatedPerspectiveCamera = animated(PerspectiveCamera);
 
-  // const cameraPath = [
-  //   [15, 6, 10],
-  //   [0, 0, 8],
-  // ];
-
-  // const { position } = useSprings(
-  //   cameraPath.length,
-  //   cameraPath.map((path) => ({
-  //     position: path,
-  //     config: {
-  //       duration: 10000,
-  //       easing: easings.easeInOutSine,
-  //     },
-  //     onResolve: () => {
-  //       setEnableLookAt(false); // Disable lookat so camera can follow mouse
-  //     },
-  //   }))
-  // );
-
   return (
     <>
       {/* <OrbitControls /> */}
@@ -103,7 +87,8 @@ const Camera = ({
         ref={ref}
         makeDefault
         fov={50}
-        position={enableLookAt ? position : menuPositionSpring.position}
+        position={position}
+        rotation={menuRotationSpring.rotation}
       />
     </>
   );
