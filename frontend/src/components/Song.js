@@ -17,9 +17,9 @@ export default function Song({
   soundOn,
   songIndex,
 }) {
-  const x = -3.2;
-  const y = 1.4;
-  const z = 4;
+  const songInfoTextX = -3.2;
+  const songInfoTextY = 1.4;
+  const songInfoTextZ = 4;
 
   const [songs, setSongs] = useState(songData); // List of songs
   const [currentSong, setCurrentSong] = useState({
@@ -103,7 +103,7 @@ export default function Song({
         size={0.3}
         height={0.065}
         curveSegments={12}
-        position={[x, y, z]}
+        position={[songInfoTextX, songInfoTextY, songInfoTextZ]}
         rotation={[0.5, 0.5, -0.25]}
       >
         {currentSong.name}
@@ -119,7 +119,7 @@ export default function Song({
         size={0.1}
         height={0.065}
         curveSegments={12}
-        position={[x, y - 0.3, z]}
+        position={[songInfoTextX, songInfoTextY - 0.3, songInfoTextZ]}
         rotation={[0.5, 0.5, -0.25]}
       >
         {currentSong.artist}
