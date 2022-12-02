@@ -1,19 +1,12 @@
 import "./App.css";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 
-import {
-  ContactShadows,
-  Environment,
-  Float,
-  Sparkles,
-} from "@react-three/drei";
-import { useSpring, easings, useSpringRef } from "@react-spring/three";
+import { Environment, Float, Sparkles } from "@react-three/drei";
 
 // Load turntable 3D model
 import Turntable from "./components/Turntable";
 import Camera from "./components/Camera";
-import Words from "./components/Words";
 
 import Buttons from "./components/Buttons";
 import Song from "./components/Song";

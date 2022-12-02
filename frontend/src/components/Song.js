@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Text, Text3D } from "@react-three/drei";
+import React, { useEffect, useState } from "react";
+import { Text3D } from "@react-three/drei";
 import { animated, useSpring } from "@react-spring/three";
 import { v4 as uuidv4 } from "uuid";
 
