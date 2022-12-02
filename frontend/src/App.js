@@ -1,12 +1,19 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 
-import { Environment, Float, Sparkles } from "@react-three/drei";
+import {
+  ContactShadows,
+  Environment,
+  Float,
+  Sparkles,
+} from "@react-three/drei";
+import { useSpring, easings, useSpringRef } from "@react-spring/three";
 
 // Load turntable 3D model
 import Turntable from "./components/Turntable";
 import Camera from "./components/Camera";
+import Words from "./components/Words";
 
 import Buttons from "./components/Buttons";
 import Song from "./components/Song";
@@ -17,6 +24,7 @@ const COVERPICSURLS = ["Aiguille.jpg", "CanaryForest.jpg", "Sworn.jpg"];
 const Scene = () => {
   // States
   // const [turntablePosition, setTurntablePosition] = useState([0, -0.24, 0]);
+
   const [playing, setPlaying] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [toneArmFinished, setToneArmFinished] = useState(false);
@@ -45,7 +53,6 @@ const Scene = () => {
         mouse={mouse}
         enableLookAt={enableLookAt}
         setEnableLookAt={setEnableLookAt}
-        focused={focused}
       />
       <Lights />
       <Sparkles count={2000} scale={25} size={2} />
