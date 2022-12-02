@@ -1,5 +1,10 @@
-# Getting Started with Create React App
+# Vintage Turntable Frontend
 
+## Concept Diagrams
+
+### Song Menu List
+
+![song menu list concept art](https://github.com/seungguini/vintage_turntable/blob/[branch]/image.jpg?raw=true)
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
