@@ -14,15 +14,10 @@ import {
   PresentationControls,
 } from "@react-three/drei";
 import * as THREE from "three";
-import { animated, easings, useSpring } from "@react-spring/three";
 import { useFrame, useLoader } from "@react-three/fiber";
 
 export default function Turntable({
   coverPicUrl,
-  setHovering,
-  hovering,
-  focused,
-  setFocused,
   playing,
   toneArmFinished,
   setToneArmFinished,
@@ -47,9 +42,12 @@ export default function Turntable({
     toneArmAction.play();
   }, []);
 
+  // Animate tone arm
   useEffect(() => {
     setToneArmFinished(false);
     const toneArmAction = actions["Tone ArmAction.003"];
+
+    // Animate tone arm based on whether song is playing
     if (playing) {
       toneArmAction.setEffectiveTimeScale(1);
       toneArmAction.paused = false;
@@ -64,10 +62,6 @@ export default function Turntable({
       setToneArmFinished(true);
     });
   }, [playing]);
-
-  useEffect(() => {
-    // document.body.style.cursor = hovering ? "pointer" : "auto"; // change pointer to finger when hovered
-  }, [hovering]);
 
   // Album Cover
   const colorMap = useLoader(
@@ -88,11 +82,9 @@ export default function Turntable({
 
   useFrame(() => {
     if (playing) recordRef.current.rotation.z += 0.003;
-    // turntableRef.current.rotation.y += 0.1;
-    // turntableRef.current.rotation.z += 0.1;
-    // turntableRef.current.rotation.x += 0.1;
   });
 
+  // Set album cover rotation to orginal once a new picture is loaded
   useEffect(() => {
     recordRef.current.rotation.z = 0;
   }, [coverPicUrl]);

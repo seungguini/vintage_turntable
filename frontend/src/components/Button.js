@@ -1,7 +1,7 @@
 //  Base component for all button styles
 
 import { animated, useSpring } from "@react-spring/three";
-import { useFBX, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 
 import { useEffect, useState } from "react";
 

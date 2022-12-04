@@ -17,36 +17,17 @@ import Camera from "./components/Camera";
 import Buttons from "./components/Buttons";
 import Song from "./components/Song";
 import Lights from "./components/Lights";
-import MenuButtons from "./components/MenuButtons";
-import SongInfo from "./components/SongInfo";
-import { useSpring } from "@react-spring/three";
+
+const COVERPICSURLS = ["Aiguille.jpg", "CanaryForest.jpg", "Sworn.jpg"];
 
 const Scene = () => {
   // States
-  const [hovering, setHovering] = useState(false);
-  const [focused, setFocused] = useState(false); // If Turntable is clicked
+  // const [turntablePosition, setTurntablePosition] = useState([0, -0.24, 0]);
+
   const [playing, setPlaying] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
   const [toneArmFinished, setToneArmFinished] = useState(false);
-  const [currentSong, setCurrentSong] = useState({
-    name: "Beaver Creek",
-    cover:
-      "https://chillhop.com/wp-content/uploads/2020/09/0255e8b8c74c90d4a27c594b3452b2daafae608d-1024x1024.jpg",
-    artist: "Aso, Middle School, Aviino",
-    audio: "Beaver Creek.mp3",
-    color: ["#205950", "#2ab3bf"],
-    id: uuidv4(),
-    active: true,
-  });
-  const coverPicUrls = [
-    "Beaver Creek.jpg",
-    "Daylight.jpg",
-    "Keep Going.jpg",
-    "Nightfall.jpg",
-    "Reflection.jpg",
-    "Under the City Stars.jpg",
-  ];
-  const [coverPicUrl, setCoverPicUrl] = useState("Beaver Creek.jpg");
+  const [coverPicUrl, setCoverPicUrl] = useState("Aiguille.jpg");
 
   const [seeMenu, setSeeMenu] = useState(false); // Menu mode
   const [songIndex, setSongIndex] = useState(0);
@@ -56,7 +37,7 @@ const Scene = () => {
 
   useEffect(() => {
     console.log("Updating cover pic!");
-    setCoverPicUrl(coverPicUrls[songIndex % 3]);
+    setCoverPicUrl(COVERPICSURLS[songIndex % 3]);
   }, [songIndex]);
 
   const playingSongInfoSpring = useSpring({
@@ -103,10 +84,6 @@ const Scene = () => {
         floatingRange={[-0.2, 0.2]} // Range of y-axis values the object will float within, defaults to [-0.1,0.1]
       >
         <Turntable
-          hovering={hovering}
-          setHovering={setHovering}
-          focused={focused}
-          setFocused={setFocused}
           playing={playing}
           toneArmFinished={toneArmFinished}
           setToneArmFinished={setToneArmFinished}

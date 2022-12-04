@@ -31,6 +31,22 @@ export default function Buttons({
     console.log("setting play option");
   };
 
+  const nextUnclickHandler = () => {
+    if (songIndex == numSongs) {
+      setSongIndex(0); // Allows songIndex to loop
+    } else {
+      setSongIndex(songIndex + 1);
+    }
+  };
+
+  const prevUnclickHandler = () => {
+    if (songIndex == 0) {
+      setSongIndex(numSongs); // Allows songIndex to loop
+    } else {
+      setSongIndex(songIndex - 1);
+    }
+  };
+
   return (
     <group scale={0.3} position={position}>
       <Button
@@ -76,13 +92,7 @@ export default function Buttons({
         modelPath2={"/models/buttons/next_button.glb"}
         position={[1, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
-        additionalUnclickHandler={() => {
-          if (songIndex == numSongs) {
-            setSongIndex(0); // Allows songIndex to loop
-          } else {
-            setSongIndex(songIndex + 1);
-          }
-        }}
+        additionalUnclickHandler={nextUnclickHandler}
       />
       <Button
         id="prevButton"
@@ -94,13 +104,7 @@ export default function Buttons({
         modelPath2={"/models/buttons/prev_button.glb"}
         position={[-1, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
-        additionalUnclickHandler={() => {
-          if (songIndex == 0) {
-            setSongIndex(numSongs); // Allows songIndex to loop
-          } else {
-            setSongIndex(songIndex - 1);
-          }
-        }}
+        additionalUnclickHandler={prevUnclickHandler}
       />
       <Button
         id="menuButton"

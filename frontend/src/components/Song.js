@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Text, Text3D } from "@react-three/drei";
+import React, { useEffect, useState } from "react";
+import { Text3D } from "@react-three/drei";
 import { animated, useSpring } from "@react-spring/three";
 
 import data from "../utils";
@@ -22,7 +22,22 @@ export default function Song({
   coverPicUrl,
   position,
 }) {
-  const [songs, setSongs] = useState(data()); // List of songs
+  const songInfoTextX = -3.2;
+  const songInfoTextY = 1.4;
+  const songInfoTextZ = 4;
+
+  const [songs, setSongs] = useState(songData); // List of songs
+  const [currentSong, setCurrentSong] = useState(songs[0]);
+  // const [currentSong, setCurrentSong] = useState({
+  //   name: "Beaver Creek",
+  //   cover:
+  //     "https://chillhop.com/wp-content/uploads/2020/09/0255e8b8c74c90d4a27c594b3452b2daafae608d-1024x1024.jpg",
+  //   artist: "Aso, Middle School, Aviino",
+  //   audio: "Beaver Creek.mp3",
+  //   color: ["#205950", "#2ab3bf"],
+  //   id: uuidv4(),
+  //   active: true,
+  // });
 
   // Handle change in song
   useEffect(() => {
@@ -82,13 +97,38 @@ export default function Song({
 
   return (
     <>
-      <group position={position}>
-        {/* <AlbumPicture
-          coverPicUrl={coverPicUrl}
-          position={[-2, 0, 0]}
+      <AnimatedText
+        font={process.env.PUBLIC_URL + "/fonts/Roboto_Regular.json"}
+        size={0.3}
+        height={0.065}
+        curveSegments={12}
+        position={[songInfoTextX, songInfoTextY, songInfoTextZ]}
+        rotation={[0.5, 0.5, -0.25]}
+      >
+        {currentSong.name}
+        <animated.meshStandardMaterial
+          color={[0.68, 0.77, 0.81]}
+          emissive={[1, 0.1, 0]}
+          transparent={true}
           opacity={opacity}
-        /> */}
-      </group>
+        />
+      </AnimatedText>
+      <AnimatedText
+        font={process.env.PUBLIC_URL + "/fonts/Roboto_Regular.json"}
+        size={0.1}
+        height={0.065}
+        curveSegments={12}
+        position={[songInfoTextX, songInfoTextY - 0.3, songInfoTextZ]}
+        rotation={[0.5, 0.5, -0.25]}
+      >
+        {currentSong.artist}
+        <animated.meshStandardMaterial
+          color={[0.68, 0.77, 0.81]}
+          emissive={[1, 0.1, 0]}
+          transparent={true}
+          opacity={opacity}
+        />
+      </AnimatedText>
     </>
   );
 }
