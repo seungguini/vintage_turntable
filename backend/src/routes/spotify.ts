@@ -123,18 +123,42 @@ router.get("/login", (req, res) => {
  */
 router.get('/callback', async (req, res)=> {
   const code : string = req.query.code.toString() || null;
-  const state : string = req.query.code.toString() || null;
+  const state : string = req.query.state.toString() || null;
+  const error : string = req.query.error.toString() || null;
+
+  // User rejects our authorization to use spotify
+  if (error) {
+    res.redirect('/statusCheck?' +
+      querystring.stringify({
+        error
+    }));
+
+    // Uncomment when integrating with frontend
+    // res.redirect(`${frontendURI}?` +
+    // querystring.stringify({
+    //   error
+    // }));
+  }
 
   // Probably can use redis database to store
   if (state === null) {
-    res.redirect('/' +
+    res.redirect('/statusCheck?' +
       querystring.stringify({
         error: 'state_mismatch'
-      }));
+    }));
+
+    // Uncomment when integrating with frontend
+    // res.redirect(`${frontendURI}?` + 
+    //   querystring.stringify({
+    //     error: 'state_mismatch'
+    // }));
   } else {
-    let url = new URL('https://accounts.spotify.com/api/token');
+    const spotifyTokenURL = "https://accounts.spotify.com/api/token";
+    let url = new URL(spotifyTokenURL);
 
     // Setting the query params
+    // Documentation here: 
+    // https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
     url.searchParams.set("code", code);
     url.searchParams.set("redirect_uri", redirectURI);
     url.searchParams.set("grant_type", "authorization_code")
@@ -150,7 +174,18 @@ router.get('/callback', async (req, res)=> {
     const accessTokenResponse = await fetch(url, options);
 
     if (!accessTokenResponse.ok) {
-      return res.send(`Error with code response: ${await accessTokenResponse.text()}`)
+
+      const textError = await accessTokenResponse.text()
+      res.redirect('/statusCheck?' +
+        querystring.stringify({
+          error: textError
+      }));
+
+    // Uncomment when integrating with frontend
+    // res.redirect(`${frontendURI}?` + 
+    //   querystring.stringify({
+    //     error: textError
+    // }));
     }
 
     const body = await accessTokenResponse.json();
