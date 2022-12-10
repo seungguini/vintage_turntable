@@ -9,8 +9,16 @@ Ensure you have `node v18.12.1` and `npm v9.1.1` installed
 
 1. `npm i`
 1. `touch .env`
-- Ask Justin for the environment variables
-2. `npm start` 
+- Either ask Justin for the environment variables or you can setup on your own spotify account.
+- If you are setting up on your own account, make sure to set your callback to `${BASE_URL}/api/spotify/callback` Ex. `http://localhost:8000/api/spotify/callback`
+
+- Example .env
+```.env
+SPOTIFY_CLIENT_SECRET="your_client_secret_here"
+SPOTIFY_CLIENT_ID="your_client_id"
+```
+
+3. `npm start` 
 
 ## Getting The Spotify Access Token
 

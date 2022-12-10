@@ -9,10 +9,25 @@ const clientId = process.env.SPOTIFY_CLIENT_ID || "";
 const redirectURI = "http://localhost:8000/api/spotify/callback";
 const frontendURI = "http://localhost:3000/"
 
+// Scopes: https://developer.spotify.com/documentation/general/guides/authorization/scopes/
+const scope = "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state";
+
 const router = express.Router();
 
-// Creates or regenerate session. This is so we can start fresh new when
-// going through the authentication process
+/**
+ * GET
+ * Description: Creates or regenerate session. This is so we can start fresh new when
+ * going through the authentication process.
+ * 
+ * Query Params: None
+ * Body: None
+ * 
+ * Returns: None. It will store the cookie in your browser
+ * 
+ * Example.
+ * 
+ * GET http://localhost:8000/api/spotify/session
+ */
 router.get("/session", (req, res) => {
   req.session.regenerate((err) => {
     if(err) {
@@ -30,7 +45,19 @@ router.get("/session", (req, res) => {
 
 })
 
-// Deletes session
+/**
+ * DELETE
+ * Description: Deletes session.
+ * 
+ * Query Params: None
+ * Body: None
+ * 
+ * Returns: None
+ * 
+ * Example.
+ * 
+ * Delete http://localhost:8000/api/spotify/session
+ */
 router.delete("/session", (req, res) => {
   const sessionId = req.session.id;
 
@@ -49,9 +76,20 @@ router.delete("/session", (req, res) => {
 
 })
 
+/**
+ * GET
+ * Description: Kickstarts the process to login to your spotify account
+ * 
+ * Query Params: None
+ * Body: None
+ * 
+ * Returns: None
+ * 
+ * Example.
+ * GET http://localhost:8000/api/spotify/login
+ */
 router.get("/login", (req, res) => {
   const state = generateRandomString(16);
-  const scope = "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state";
 
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
@@ -63,6 +101,26 @@ router.get("/login", (req, res) => {
   }));
 });
 
+/**
+ * GET
+ * Description: What spotify authorization workflow will call when you log into your account.
+ * This should never be called by anyone else other than the spotify service. Here we recieve
+ * the access_token and refresh_token and store it in the session-store.
+ * 
+ * Query Params:
+ *  If user allows us to access their spotify account
+ *  - Code: String - An authorization code that can be exchanged for an Access Token. 
+ *  - State: String - The value of the state parameter supplied in the request.
+ * 
+ *  If user rejects us to access their spotify account
+ *  - Error: String - The reason authorization failed, for example: “access_denied”
+ *  - State: String - The value of the state parameter supplied in the request.
+ * 
+ *  Return: Redirect to webapp.
+ * 
+ *  Example.
+ *  GET http://localhost:8000/api/spotify/callback
+ */
 router.get('/callback', async (req, res)=> {
   const code : string = req.query.code.toString() || null;
   const state : string = req.query.code.toString() || null;
@@ -125,6 +183,25 @@ router.get('/callback', async (req, res)=> {
   }
 })
 
+/**
+ * GET
+ * Description: Fetch the spotify access_token and refresh_token. The session from cookies in the browser
+ * should retrieve the right credentials.
+ * 
+ * Query Params: None
+ * Body: None
+ * 
+ * 
+ * Return - 200 Success : {
+ *  accessToken: String
+ *  refreshToken: String
+ * }
+ * 
+ * Return - 404 Not Found : "Access Token Cannot Be Found"
+ * 
+ * Example.
+ * GET http://localhost:8000/api/spotify/token
+ */
 router.get('/token', (req, res) => {
   const accessToken = req.session.spotifyAccessToken;
   const refreshToken = req.session.spotifyRefreshToken;
@@ -141,7 +218,29 @@ router.get('/token', (req, res) => {
   }
 })
 
-router.options('/refresh_token', cors());
+/**
+ * POST
+ * Description: Refresh access_token and refresh_token.
+ * 
+ * Query Params: None
+ * Body: {
+ *  refresh_token: String
+ * }
+ * 
+ * 
+ * Return - 200 Success : {
+ *  access_token: String
+ *  refresh_token: String
+ * }
+ *
+ * 
+ * Example.
+ * POST http://localhost:8000/api/spotify/refresh_token
+ * Body: {
+ *  refresh_token: "this_is_a_random_refresh_token_here"
+ * }
+ */
+router.options('/refresh_token', cors()); // Need this for cors
 router.post('/refresh_token', async (req, res) => {
   // requesting access token from refresh token
 
