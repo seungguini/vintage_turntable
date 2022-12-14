@@ -1,10 +1,20 @@
 import { animated } from "@react-spring/three";
 import { PerspectiveCamera } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
-import React, { useRef, useState } from "react";
+import { useFrame } from "@react-three/fiber";
+import React, { useRef } from "react";
 import * as THREE from "three";
 
-const Camera = ({
+interface CameraProps {
+  turntablePosition: Array<number>
+  enableLookAt: boolean
+  setEnableLookAt: boolean
+  camera: THREE.Camera
+  mouse: THREE.Vector2
+  position: THREE.Vector3
+  focused: boolean
+}
+
+export default function Camera({
   turntablePosition,
   enableLookAt,
   setEnableLookAt,
@@ -12,7 +22,7 @@ const Camera = ({
   mouse,
   position,
   focused,
-}) => {
+} : CameraProps) {
   const ref = useRef();
 
   const vec = new THREE.Vector3();
@@ -44,27 +54,7 @@ const Camera = ({
     // console.log(position);
   });
 
-  // Animate initial camera movement
   const AnimatedPerspectiveCamera = animated(PerspectiveCamera);
-
-  // const cameraPath = [
-  //   [15, 6, 10],
-  //   [0, 0, 8],
-  // ];
-
-  // const { position } = useSprings(
-  //   cameraPath.length,
-  //   cameraPath.map((path) => ({
-  //     position: path,
-  //     config: {
-  //       duration: 10000,
-  //       easing: easings.easeInOutSine,
-  //     },
-  //     onResolve: () => {
-  //       setEnableLookAt(false); // Disable lookat so camera can follow mouse
-  //     },
-  //   }))
-  // );
 
   return (
     <>
@@ -76,6 +66,4 @@ const Camera = ({
       />
     </>
   );
-};
-
-export default Camera;
+}
