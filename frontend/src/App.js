@@ -15,7 +15,7 @@ import Turntable from "./components/Turntable";
 import Camera from "./components/Camera";
 import Words from "./components/Words";
 
-import Buttons from "./components/Buttons";
+import Buttons from "./components/ButtonsJS";
 const song = new Audio("/songs/Daylight.mp3");
 song.volume = 0.01;
 const toneArmOnSoundeffect = new Audio("/soundeffects/tonearm_on_sound.mp3");
