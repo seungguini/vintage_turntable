@@ -1,6 +1,5 @@
 import { animated, useSpring } from "@react-spring/three";
 import { useGLTF } from "@react-three/drei";
-import * as THREE from 'three'
 import React from "react";
 
 import { useEffect, useState } from "react";
@@ -74,16 +73,19 @@ export default function Button({
   }, [hovering]);
 
   return (
-    <primitive
-      position={position}
-      rotation={rotation}
-      scale={scale}
-      object={switchButton ? (showModelOne ? modelOne : modelTwo) : modelOne}
-      onPointerDown={clickHandler}
-      onPointerUp={unclickHandler}
-      onPointerEnter={() => setHovering(true)}
-      onPointerLeave={() => setHovering(false)}
-    ></primitive>
+    <>
+    {/* @ts-ignore: https://github.com/pmndrs/react-spring/issues/1515 */}
+    <animated.primitive
+        position={position}
+        rotation={rotation}
+        scale={scale}
+        object={switchButton ? (showModelOne ? modelOne : modelTwo) : modelOne}
+        onPointerDown={clickHandler}
+        onPointerUp={unclickHandler}
+        onPointerEnter={() => setHovering(true)}
+        onPointerLeave={() => setHovering(false)}
+      />
+    </>
   );
 
 }

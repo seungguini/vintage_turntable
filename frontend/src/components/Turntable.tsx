@@ -6,7 +6,21 @@ import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 import { animated } from "@react-spring/three";
-import { useFrame } from "@react-three/fiber";
+import { ObjectMap } from "@react-three/fiber";
+import { GLTF } from "three/examples/jsm/loaders/GLTFLoader"
+
+
+interface TurntableProps {
+  setHovering: (a : boolean) => void,
+  hovering: boolean,
+  focused: boolean,
+  setFocused: (a : boolean) => void,
+  scale: number,
+  rotation: THREE.Euler,
+  position: THREE.Vector3,
+  playing: boolean,
+  setToneArmFinished: (a : boolean) => void
+}
 
 export default function Turntable({
   setHovering,
@@ -17,18 +31,18 @@ export default function Turntable({
   rotation,
   position,
   playing,
-  setToneArmFinished,
-}) {
-  const group = useRef();
+  setToneArmFinished
+} : TurntableProps) {
+  const group : any = useRef();
   const modelLocation = "/models/turntable.glb";
-  const turntable = useGLTF(modelLocation);
+  const turntable : any = useGLTF(modelLocation);
   const { nodes, materials, animations } = turntable;
   console.log(turntable);
   const { actions } = useAnimations(animations, group);
   // Animations
 
   useEffect(() => {
-    const toneArmAction = actions["Tone ArmAction.003"];
+    const toneArmAction : any = actions["Tone ArmAction.003"];
 
     toneArmAction.clampWhenFinished = true;
     toneArmAction.paused = true;
@@ -39,7 +53,7 @@ export default function Turntable({
 
   useEffect(() => {
     setToneArmFinished(false);
-    const toneArmAction = actions["Tone ArmAction.003"];
+    const toneArmAction : any = actions["Tone ArmAction.003"];
     console.log(toneArmAction);
     if (playing) {
       toneArmAction.setEffectiveTimeScale(1);
