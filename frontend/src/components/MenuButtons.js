@@ -39,8 +39,8 @@ export default function MenuButtons({
         setSwitchButton={setSoundOn}
         modelPath1={"/models/buttons/headphones_button.glb"}
         modelPath2={"/models/buttons/headphones_button.glb"}
-        position={[2, -1, 4]}
-        rotation={[0.5, 0.5, -0.25]}
+        position={[0, 0, 0]}
+        rotation={[0, 0, 0]}
         additionalUnclickHandler={() => {
           setSeeMenu(false);
         }}

@@ -4,17 +4,14 @@ import * as THREE from "three";
 
 export default function AlbumPicture({ coverPicUrl, position, opacity }) {
   // Album Cover
-  const colorMap = useLoader(
-    THREE.TextureLoader,
-    "/covers/" + coverPicUrl
-  ).clone();
+  const colorMap = useLoader(THREE.TextureLoader, "/covers/" + coverPicUrl);
   colorMap.flipY = true;
   colorMap.repeat.set(1, 1);
 
   //   colorMap.repeat.set(1, 1);
   return (
-    <mesh position={position} rotation={[0, Math.PI * 0.2, 0]}>
-      <boxBufferGeometry attach="geometry" args={[1.3, 1.3, 0.4]} />
+    <mesh position={position}>
+      <boxGeometry attach="geometry" args={[0.25, 0.25, 0.2]} />
       <meshBasicMaterial
         transparent
         opacity={0.5}

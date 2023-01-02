@@ -89,13 +89,13 @@ export default function Turntable({
     recordRef.current.rotation.z = 0;
   }, [coverPicUrl]);
   return (
-    <group position={[0, -0.6, 4.2]} scale={0.8} ref={turntableRef}>
+    <group position={[0, -0.6, 4]} scale={0.8} ref={turntableRef}>
       <PresentationControls
         enabled={true}
         global={false}
         speed={2}
         config={{ mass: 0.3 }}
-        // snap={{ mass: 4, tension: 1500 }}
+        snap={{ mass: 4, tension: 1500 }}
         rotation={[0, Math.PI * 0.17, 0]}
         polar={[0, 0]}
         // azimuth={[-Math.PI / 1.4, Math.PI / 2]}

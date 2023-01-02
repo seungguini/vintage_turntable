@@ -11,7 +11,9 @@ const vinylSoundeffect = new Audio("/soundeffects/vinyl_soundeffect.mp3");
 vinylSoundeffect.volume = 1;
 vinylSoundeffect.loop = true;
 
-export default function Song({
+// Player component which manages playback for the song.
+// Local mp3 files || Spotify stream
+export default function LocalSongPlayer({
   currentSong,
   setCurrentSong,
   playing,
@@ -19,26 +21,8 @@ export default function Song({
   toneArmFinished,
   soundOn,
   songIndex,
-  coverPicUrl,
-  position,
+  songs,
 }) {
-  const songInfoTextX = -3.2;
-  const songInfoTextY = 1.4;
-  const songInfoTextZ = 4;
-
-  const [songs, setSongs] = useState(songData); // List of songs
-  const [currentSong, setCurrentSong] = useState(songs[0]);
-  // const [currentSong, setCurrentSong] = useState({
-  //   name: "Beaver Creek",
-  //   cover:
-  //     "https://chillhop.com/wp-content/uploads/2020/09/0255e8b8c74c90d4a27c594b3452b2daafae608d-1024x1024.jpg",
-  //   artist: "Aso, Middle School, Aviino",
-  //   audio: "Beaver Creek.mp3",
-  //   color: ["#205950", "#2ab3bf"],
-  //   id: uuidv4(),
-  //   active: true,
-  // });
-
   // Handle change in song
   useEffect(() => {
     console.log("CHANGING SONG");
@@ -95,40 +79,5 @@ export default function Song({
     }
   }, [toneArmFinished]);
 
-  return (
-    <>
-      <AnimatedText
-        font={process.env.PUBLIC_URL + "/fonts/Roboto_Regular.json"}
-        size={0.3}
-        height={0.065}
-        curveSegments={12}
-        position={[songInfoTextX, songInfoTextY, songInfoTextZ]}
-        rotation={[0.5, 0.5, -0.25]}
-      >
-        {currentSong.name}
-        <animated.meshStandardMaterial
-          color={[0.68, 0.77, 0.81]}
-          emissive={[1, 0.1, 0]}
-          transparent={true}
-          opacity={opacity}
-        />
-      </AnimatedText>
-      <AnimatedText
-        font={process.env.PUBLIC_URL + "/fonts/Roboto_Regular.json"}
-        size={0.1}
-        height={0.065}
-        curveSegments={12}
-        position={[songInfoTextX, songInfoTextY - 0.3, songInfoTextZ]}
-        rotation={[0.5, 0.5, -0.25]}
-      >
-        {currentSong.artist}
-        <animated.meshStandardMaterial
-          color={[0.68, 0.77, 0.81]}
-          emissive={[1, 0.1, 0]}
-          transparent={true}
-          opacity={opacity}
-        />
-      </AnimatedText>
-    </>
-  );
+  return <></>;
 }

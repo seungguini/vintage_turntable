@@ -1,7 +1,7 @@
 import { animated, easings, useSpring } from "@react-spring/three";
 import { PerspectiveCamera } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 const Camera = ({

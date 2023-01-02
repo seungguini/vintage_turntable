@@ -1,45 +1,42 @@
 import { animated, useSpring } from "@react-spring/three";
-import { Text, Text3D } from "@react-three/drei";
+import { Center, Text, Text3D } from "@react-three/drei";
 import React from "react";
 
-export default function SongInfo({ currentSong, playing, position, opacity }) {
+// Song Title, Artist, Album Name
+
+const THICKNESS = 0.005;
+const SIZE = 0.05;
+
+export default function SongInfo({ song, position, opacity }) {
   let [x, y, z] = position;
-  const AnimatedText = animated(Text);
+  console.log(song.name);
+  console.log(position);
+  const AnimatedText = animated(Text3D);
 
   return (
-    <group>
+    // <Center disableY disableZ>
+    <group position={[-0.18, 0, 0]}>
       <AnimatedText
         font={process.env.PUBLIC_URL + "/fonts/Roboto_Regular.json"}
-        // size={0.2}
-        // height={0.065}
-        // curveSegments={12}
-        // rotation={[0, Math.PI * 0.2, 0]}
+        size={SIZE}
+        height={THICKNESS} // this is actually the width (ie. how thick the 3D-ness is)
+        curveSegments={12}
         position={[x, y, z]}
-        // rotation={[0, -0.35, -0.05]}
       >
-        {currentSong.name}
-        <animated.meshStandardMaterial
-          color={[0.68, 0.77, 0.81]}
-          transparent={true}
-          opacity={opacity}
-        />
+        {song.name}
+        <animated.meshStandardMaterial transparent={true} opacity={opacity} />
       </AnimatedText>
       <AnimatedText
         font={process.env.PUBLIC_URL + "/fonts/Roboto_Regular.json"}
-        // size={0.05}
-        // height={0.065}
-        // curveSegments={12}
-        // rotation={[0, Math.PI * 0.2, 0]}
-        position={[x, y - 0.2, z]}
-        // rotation={[0, -0.35, -0.05]}
+        size={SIZE * 0.7}
+        height={THICKNESS}
+        curveSegments={12}
+        position={[x, y - 0.08, z]}
       >
-        {currentSong.artist}
-        <animated.meshStandardMaterial
-          color={[0.68, 0.77, 0.81]}
-          transparent={true}
-          opacity={opacity}
-        />
+        {song.artist}
+        <animated.meshStandardMaterial transparent={true} opacity={opacity} />
       </AnimatedText>
     </group>
+    // </Center>
   );
 }
