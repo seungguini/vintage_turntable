@@ -9,12 +9,16 @@ import {
 } from "@react-three/drei";
 import { useSpring, easings, useSpringRef } from "@react-spring/three";
 
-// Load turntable 3D model
+// States
+import { usePlaybackStore } from "./states";
+
+// Components
 import Turntable from "./components/Turntable";
 import Camera from "./components/Camera";
-
 import Buttons from "./components/Buttons";
 import Lights from "./components/Lights";
+
+// Audio - to be changed to states
 const song = new Audio("/songs/Daylight.mp3");
 song.volume = 0.01;
 const toneArmOnSoundeffect = new Audio("/soundeffects/tonearm_on_sound.mp3");
@@ -28,11 +32,15 @@ const Scene = () => {
   // const [turntablePosition, setTurntablePosition] = useState([0, -0.24, 0]);
   const [hovering, setHovering] = useState(false);
   const [focused, setFocused] = useState(false); // If Turntable is clicked
-  const [playing, setPlaying] = useState(false);
-  const [soundOn, setSoundOn] = useState(true);
   const [toneArmFinished, setToneArmFinished] = useState(false);
 
-  // AUDIO
+  // Playback States
+
+  // Old states -> converted to zustand store
+  const [playing, setPlaying] = useState(false);
+  const [soundOn, setSoundOn] = useState(true);
+
+  const { isPlaying } = usePlaybackStore((state) => state.isPlaying);
 
   useEffect(() => {
     if (!playing) {
