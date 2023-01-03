@@ -1,6 +1,5 @@
 import "./App.css";
-import ReactDOM from "react-dom";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import {
   ContactShadows,
@@ -13,7 +12,6 @@ import { useSpring, easings, useSpringRef } from "@react-spring/three";
 // Load turntable 3D model
 import Turntable from "./components/Turntable";
 import Camera from "./components/Camera";
-import Words from "./components/Words";
 
 import Buttons from "./components/Buttons";
 const song = new Audio("/songs/Daylight.mp3");
@@ -118,25 +116,6 @@ const Scene = () => {
     position: !focused ? [0, -0.24, 0] : [0, 0, 6],
     config: zoomConfig,
   });
-
-  // Word animations
-
-  const { opacity } = useSpring({
-    loop: { reverse: true },
-
-    from: { opacity: 0 },
-    to: { opacity: !focused ? 1 : 0 },
-    config: {
-      duration: 2000,
-      easing: easings.easeInOutSine,
-    },
-    // delay: cameraIntroDuration,
-    delay: 500,
-
-    // ref: wordsOpacityRef,
-  });
-
-  // JSX
 
   return (
     <>

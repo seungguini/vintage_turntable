@@ -6,12 +6,10 @@ import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 import { animated } from "@react-spring/three";
-import { useFrame } from "@react-three/fiber";
 
 export default function Turntable({
   setHovering,
   hovering,
-  focused,
   setFocused,
   scale,
   rotation,
@@ -23,7 +21,8 @@ export default function Turntable({
   const modelLocation = "/models/turntable.glb";
   const turntable = useGLTF(modelLocation);
   const { nodes, materials, animations } = turntable;
-  console.log(turntable);
+  console.log("printing nodes!");
+  console.log(nodes);
   const { actions } = useAnimations(animations, group);
   // Animations
 
@@ -173,7 +172,7 @@ export default function Turntable({
           position={[-0.33, -0.57, -0.52]}
           scale={0.97}
         />
-        <mesh
+        {/* <mesh
           name="Album_inner_cover"
           castShadow
           receiveShadow
@@ -181,7 +180,7 @@ export default function Turntable({
           material={materials["Album Red"]}
           position={[-0.33, 0.16, -0.52]}
           scale={0.23}
-        />
+        /> */}
         <mesh
           name="Record003"
           castShadow
