@@ -14,6 +14,7 @@ import Turntable from "./components/Turntable";
 import Camera from "./components/Camera";
 
 import Buttons from "./components/Buttons";
+import Lights from "./components/Lights";
 const song = new Audio("/songs/Daylight.mp3");
 song.volume = 0.01;
 const toneArmOnSoundeffect = new Audio("/soundeffects/tonearm_on_sound.mp3");
@@ -129,15 +130,7 @@ const Scene = () => {
         position={position}
         focused={focused}
       />
-      <ambientLight intensity={0.3} />
-      <spotLight
-        position={[10, 10, 10]}
-        angle={0.15}
-        penumbra={1}
-        shadow-mapSize={[512, 512]}
-        castShadow
-        intensity={2}
-      />
+      <Lights />
       <Sparkles count={2000} scale={25} size={2} />
       <Float
         speed={1} // Animation speed, defaults to 1
@@ -173,8 +166,6 @@ const Scene = () => {
         far={4}
       />
       <Environment preset="studio" />
-      {/* <Environment preset="sunset" background /> */}
-      {/*<Lights />*/}
     </>
   );
 };

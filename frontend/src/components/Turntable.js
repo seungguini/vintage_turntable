@@ -172,7 +172,7 @@ export default function Turntable({
           position={[-0.33, -0.57, -0.52]}
           scale={0.97}
         />
-        {/* <mesh
+        <mesh
           name="Album_inner_cover"
           castShadow
           receiveShadow
@@ -180,7 +180,7 @@ export default function Turntable({
           material={materials["Album Red"]}
           position={[-0.33, 0.16, -0.52]}
           scale={0.23}
-        /> */}
+        />
         <mesh
           name="Record003"
           castShadow
