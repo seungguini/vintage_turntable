@@ -12,6 +12,9 @@ import spotifyRoutes from "./routes/spotify";
 const app = express();
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(morgan("combined", {
   skip: (req, res) => {
     const url : string = req.url;

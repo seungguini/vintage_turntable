@@ -10,7 +10,12 @@ const redirectURI = "http://localhost:8000/api/spotify/callback";
 const frontendURI = "http://localhost:3000/"
 
 // Scopes: https://developer.spotify.com/documentation/general/guides/authorization/scopes/
-const scope = "user-read-private user-read-email streaming user-read-playback-state user-modify-playback-state";
+const scope = `
+  user-read-private
+  user-read-email
+  streaming
+  user-read-playback-state
+  user-modify-playback-state`;
 
 const router = express.Router();
 
@@ -122,13 +127,13 @@ router.get("/login", (req, res) => {
  *  GET http://localhost:8000/api/spotify/callback
  */
 router.get('/callback', async (req, res)=> {
-  const code : string = req.query.code.toString() || null;
-  const state : string = req.query.state.toString() || null;
-  const error : string = req.query.error.toString() || null;
+  const code : string = req.query.code && req.query.code.toString() || null;
+  const state : string = req.query.state && req.query.state.toString() || null;
+  const error : string = req.query.error && req.query.error.toString() || null;
 
   // User rejects our authorization to use spotify
   if (error) {
-    res.redirect('/statusCheck?' +
+    return res.redirect('/statusCheck?' +
       querystring.stringify({
         error
     }));
@@ -140,9 +145,9 @@ router.get('/callback', async (req, res)=> {
     // }));
   }
 
-  // Probably can use redis database to store
+  // State mismatch
   if (state === null) {
-    res.redirect('/statusCheck?' +
+    return res.redirect('/statusCheck?' +
       querystring.stringify({
         error: 'state_mismatch'
     }));
@@ -152,70 +157,71 @@ router.get('/callback', async (req, res)=> {
     //   querystring.stringify({
     //     error: 'state_mismatch'
     // }));
-  } else {
-    const spotifyTokenURL = "https://accounts.spotify.com/api/token";
-    let url = new URL(spotifyTokenURL);
-
-    // Setting the query params
-    // Documentation here: 
-    // https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
-    url.searchParams.set("code", code);
-    url.searchParams.set("redirect_uri", redirectURI);
-    url.searchParams.set("grant_type", "authorization_code")
-
-    const options = {
-      method: "POST",
-      headers: {
-        "Authorization": "Basic " + Buffer.from((clientId + ':' + clientSecret)).toString("base64"),
-        "Content-Type": "application/x-www-form-urlencoded"
-      }
-    };
-
-    const accessTokenResponse = await fetch(url, options);
-
-    if (!accessTokenResponse.ok) {
-
-      const textError = await accessTokenResponse.text()
-      res.redirect('/statusCheck?' +
-        querystring.stringify({
-          error: textError
-      }));
-
-    // Uncomment when integrating with frontend
-    // res.redirect(`${frontendURI}?` + 
-    //   querystring.stringify({
-    //     error: textError
-    // }));
-    }
-
-    const body = await accessTokenResponse.json();
-
-    const accessToken = body && body.access_token;
-    const refreshToken = body && body.refresh_token;
-
-    req.session.spotifyAccessToken = accessToken;
-    req.session.spotifyRefreshToken = refreshToken;
-
-    req.session.save((err) => {
-      if(err) {
-        console.log("Failed to save the data to sesssion");
-        console.log(err)
-
-        res.status(500);
-        return res.send("Cannot save token to session");
-      }
-      
-      // Uncomment this when we integrate with the frontend
-      // res.redirect(`${frontendURI}?` +
-      //   querystring.stringify({
-      //     retrieve_token: true
-      //   } 
-      // ));
-
-      res.redirect(`/statusCheck`);
-    })
-
   }
+
+  const spotifyTokenURL = "https://accounts.spotify.com/api/token";
+  let url = new URL(spotifyTokenURL);
+
+  // Setting the query params
+  // Documentation here: 
+  // https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
+  url.searchParams.set("code", code);
+  url.searchParams.set("redirect_uri", redirectURI);
+  url.searchParams.set("grant_type", "authorization_code")
+
+  const options = {
+    method: "POST",
+    headers: {
+      "Authorization": "Basic " + Buffer.from((clientId + ':' + clientSecret)).toString("base64"),
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  };
+
+  const accessTokenResponse = await fetch(url, options);
+
+  if (!accessTokenResponse.ok) {
+
+    const textError = await accessTokenResponse.text()
+    res.status(500)
+    res.redirect('/statusCheck?' +
+      querystring.stringify({
+        error: textError
+    }));
+
+  // Uncomment when integrating with frontend
+  // res.redirect(`${frontendURI}?` + 
+  //   querystring.stringify({
+  //     error: textError
+  // }));
+  }
+
+  const body = await accessTokenResponse.json();
+
+  const accessToken = body && body.access_token;
+  const refreshToken = body && body.refresh_token;
+
+  req.session.spotifyAccessToken = accessToken;
+  req.session.spotifyRefreshToken = refreshToken;
+
+  req.session.save((err) => {
+    if(err) {
+      console.log("Failed to save the data to sesssion");
+      console.log(err)
+
+      res.status(500);
+      return res.send(`Cannot save token to session: ${err.toString()}`);
+    }
+    
+    // Uncomment this when we integrate with the frontend
+    // res.redirect(`${frontendURI}?` +
+    //   querystring.stringify({
+    //     retrieve_token: true
+    //   } 
+    // ));
+
+    res.redirect(`/statusCheck`);
+  })
+
 })
 
 /**
@@ -243,7 +249,7 @@ router.get('/token', (req, res) => {
 
   if (!accessToken || !refreshToken) {
     res.status(404);
-    res.send("Cannot find access/refresh token. ")
+    res.send("Cannot find access/refresh token.")
   } else {
     res.status(200);
     res.json({
@@ -296,17 +302,21 @@ router.post('/refresh_token', async (req, res) => {
   const response = await fetch(url, options);
 
   if (!response.ok) {
-    return res.send(`Error with refresh: ${await response.text()}`);
+    res.status(500)
+    return res.send(`Error with spotify api refresh: ${await response.text()}`);
   }
 
   const body = await response.json();
 
   const newAccessToken = body && body.access_token;
-  const newRefreshToken = body && body.refresh_token;
+  const newRefreshToken = 
+    body && 
+    body.refresh_token || 
+    refreshToken; // If refresh token is not available use old refresh token
 
   res.json({
-    access_token: newAccessToken,
-    refresh_token: newRefreshToken
+    accessToken: newAccessToken,
+    refreshToken: newRefreshToken
   })
 
 });
