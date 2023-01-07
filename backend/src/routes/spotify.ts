@@ -128,6 +128,7 @@ router.get("/login", (req, res) => {
  */
 router.get('/callback', async (req, res)=> {
   const code : string = req.query.code && req.query.code.toString() || null;
+  // Will use state later to verify request
   const state : string = req.query.state && req.query.state.toString() || null;
   const error : string = req.query.error && req.query.error.toString() || null;
 
@@ -142,20 +143,6 @@ router.get('/callback', async (req, res)=> {
     // res.redirect(`${frontendURI}?` +
     // querystring.stringify({
     //   error
-    // }));
-  }
-
-  // State mismatch
-  if (state === null) {
-    return res.redirect('/statusCheck?' +
-      querystring.stringify({
-        error: 'state_mismatch'
-    }));
-
-    // Uncomment when integrating with frontend
-    // res.redirect(`${frontendURI}?` + 
-    //   querystring.stringify({
-    //     error: 'state_mismatch'
     // }));
   }
 
@@ -182,11 +169,10 @@ router.get('/callback', async (req, res)=> {
   if (!accessTokenResponse.ok) {
 
     const textError = await accessTokenResponse.text()
-    res.status(500)
+    const jsonError = JSON.parse(textError)
     res.redirect('/statusCheck?' +
-      querystring.stringify({
-        error: textError
-    }));
+      querystring.stringify(jsonError)
+    );
 
   // Uncomment when integrating with frontend
   // res.redirect(`${frontendURI}?` + 
@@ -249,7 +235,9 @@ router.get('/token', (req, res) => {
 
   if (!accessToken || !refreshToken) {
     res.status(404);
-    res.send("Cannot find access/refresh token.")
+    res.json({
+      error: "Cannot find access/refresh token."
+    })
   } else {
     res.status(200);
     res.json({
@@ -303,7 +291,11 @@ router.post('/refresh_token', async (req, res) => {
 
   if (!response.ok) {
     res.status(500)
-    return res.send(`Error with spotify api refresh: ${await response.text()}`);
+    const body = await response.json()
+    return res.json({
+      error: body.error,
+      error_description: body.error_description
+    });
   }
 
   const body = await response.json();

@@ -7,7 +7,7 @@
     "start": "npx nodemon src/server.ts",
     "build": "npx tsc",
     "start:prod": "npm run build && node dist/server.js",
-    "test": "mocha"
+    "test": "TESTING=true mocha"
   },
   "author": "",
   "license": "ISC",

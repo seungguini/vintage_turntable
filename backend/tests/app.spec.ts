@@ -8,6 +8,7 @@ describe("Generic routes tests", () => {
       .get("/statusCheck")
       .expect(200)
       .end((err,res) => {
+        if(err) return done(err)
 
         assert.equal(res.text, "OK")
         return done();

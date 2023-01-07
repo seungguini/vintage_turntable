@@ -17,9 +17,12 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(morgan("combined", {
   skip: (req, res) => {
-    const url : string = req.url;
 
-    return url.includes("/static/")
+    const isTesting = process.env.TESTING || false;
+
+    const url : string = req.url;
+    const staticFiles = url.includes("/static/")
+    return staticFiles || isTesting
   }
 })); // Logger to listen to requests
 app.use(express.static("static/react"));
