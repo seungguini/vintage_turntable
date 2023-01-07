@@ -26,3 +26,14 @@ SPOTIFY_CLIENT_ID="your_client_id"
 2. Go through the login. When finished, you will end up in the `/statusCheck` route
 3. In browser, type in `localhost:8000/api/spotify/token` to get access token.
 - The session is set to one hour, so the data will persist for one hour.
+
+## Tests
+
+Unit tests uses dependencies 
+1. Mocha
+2. Chai
+3. Sinon
+
+All mocha configs are in the [.mocharc.json](./.mocharc.json) file. The configs are used mainly to use typescript in tests.
+
+More info for [ts-node mocha](https://typestrong.org/ts-node/docs/recipes/mocha/)
