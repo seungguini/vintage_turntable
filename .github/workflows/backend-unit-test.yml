@@ -9,6 +9,5 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      - run: cd backend
-      - run: npm ci
+      - run: cd backend && npm ci
       - run: npm test
