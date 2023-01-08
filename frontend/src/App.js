@@ -1,6 +1,5 @@
 import "./App.css";
-import ReactDOM from "react-dom";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import {
   ContactShadows,
@@ -13,9 +12,9 @@ import { useSpring, easings, useSpringRef } from "@react-spring/three";
 // Load turntable 3D model
 import Turntable from "./components/Turntable";
 import Camera from "./components/Camera";
-import Words from "./components/Words";
 
 import Buttons from "./components/Buttons";
+import Lights from "./components/Lights";
 const song = new Audio("/songs/Daylight.mp3");
 song.volume = 0.01;
 const toneArmOnSoundeffect = new Audio("/soundeffects/tonearm_on_sound.mp3");
@@ -119,25 +118,6 @@ const Scene = () => {
     config: zoomConfig,
   });
 
-  // Word animations
-
-  const { opacity } = useSpring({
-    loop: { reverse: true },
-
-    from: { opacity: 0 },
-    to: { opacity: !focused ? 1 : 0 },
-    config: {
-      duration: 2000,
-      easing: easings.easeInOutSine,
-    },
-    // delay: cameraIntroDuration,
-    delay: 500,
-
-    // ref: wordsOpacityRef,
-  });
-
-  // JSX
-
   return (
     <>
       <Camera
@@ -150,15 +130,7 @@ const Scene = () => {
         position={position}
         focused={focused}
       />
-      <ambientLight intensity={0.3} />
-      <spotLight
-        position={[10, 10, 10]}
-        angle={0.15}
-        penumbra={1}
-        shadow-mapSize={[512, 512]}
-        castShadow
-        intensity={2}
-      />
+      <Lights />
       <Sparkles count={2000} scale={25} size={2} />
       <Float
         speed={1} // Animation speed, defaults to 1
@@ -194,8 +166,6 @@ const Scene = () => {
         far={4}
       />
       <Environment preset="studio" />
-      {/* <Environment preset="sunset" background /> */}
-      {/*<Lights />*/}
     </>
   );
 };
