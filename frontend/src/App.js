@@ -9,16 +9,11 @@ import {
 } from "@react-three/drei";
 import { useSpring, easings, useSpringRef } from "@react-spring/three";
 
-// States
-import { usePlaybackStore } from "./states";
+// Load turntable 3D model
+import Turntable from "./components/mainView/Turntable";
+import Camera from "./components/environment/Camera";
+import Buttons from "./components/buttons/Buttons";
 
-// Components
-import Turntable from "./components/Turntable";
-import Camera from "./components/Camera";
-import Buttons from "./components/Buttons";
-import Lights from "./components/Lights";
-
-// Audio - to be changed to states
 const song = new Audio("/songs/Daylight.mp3");
 song.volume = 0.01;
 const toneArmOnSoundeffect = new Audio("/soundeffects/tonearm_on_sound.mp3");
