@@ -1,6 +1,5 @@
 import "./App.css";
-import ReactDOM from "react-dom";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import {
   ContactShadows,
@@ -118,25 +117,6 @@ const Scene = () => {
     config: zoomConfig,
   });
 
-  // Word animations
-
-  const { opacity } = useSpring({
-    loop: { reverse: true },
-
-    from: { opacity: 0 },
-    to: { opacity: !focused ? 1 : 0 },
-    config: {
-      duration: 2000,
-      easing: easings.easeInOutSine,
-    },
-    // delay: cameraIntroDuration,
-    delay: 500,
-
-    // ref: wordsOpacityRef,
-  });
-
-  // JSX
-
   return (
     <>
       <Camera
@@ -149,15 +129,7 @@ const Scene = () => {
         position={position}
         focused={focused}
       />
-      <ambientLight intensity={0.3} />
-      <spotLight
-        position={[10, 10, 10]}
-        angle={0.15}
-        penumbra={1}
-        shadow-mapSize={[512, 512]}
-        castShadow
-        intensity={2}
-      />
+      <Lights />
       <Sparkles count={2000} scale={25} size={2} />
       <Float
         speed={1} // Animation speed, defaults to 1
@@ -193,8 +165,6 @@ const Scene = () => {
         far={4}
       />
       <Environment preset="studio" />
-      {/* <Environment preset="sunset" background /> */}
-      {/*<Lights />*/}
     </>
   );
 };
