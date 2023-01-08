@@ -10,11 +10,10 @@ import {
 import { useSpring, easings, useSpringRef } from "@react-spring/three";
 
 // Load turntable 3D model
-import Turntable from "./components/Turntable";
-import Camera from "./components/Camera";
+import Turntable from "./components/mainView/Turntable";
+import Camera from "./components/environment/Camera";
+import Buttons from "./components/buttons/Buttons";
 
-import Buttons from "./components/Buttons";
-import Lights from "./components/Lights";
 const song = new Audio("/songs/Daylight.mp3");
 song.volume = 0.01;
 const toneArmOnSoundeffect = new Audio("/soundeffects/tonearm_on_sound.mp3");
