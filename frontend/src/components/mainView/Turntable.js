@@ -6,6 +6,7 @@ import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 import { animated } from "@react-spring/three";
+import { useIsPlaying } from "../../states";
 
 export default function Turntable({
   setHovering,
@@ -24,8 +25,11 @@ export default function Turntable({
   console.log("printing nodes!");
   console.log(nodes);
   const { actions } = useAnimations(animations, group);
-  // Animations
 
+  // States + actions from the playbackStore
+  const isPlaying = useIsPlaying();
+
+  // Animations
   useEffect(() => {
     const toneArmAction = actions["Tone ArmAction.003"];
 
