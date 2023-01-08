@@ -12,6 +12,7 @@ import { useSpring, easings, useSpringRef } from "@react-spring/three";
 // Load turntable 3D model
 import Turntable from "./components/mainView/Turntable";
 import Camera from "./components/environment/Camera";
+import Lights from "./components/environment/Lights";
 import Buttons from "./components/buttons/Buttons";
 
 const song = new Audio("/songs/Daylight.mp3");
@@ -34,8 +35,6 @@ const Scene = () => {
   // Old states -> converted to zustand store
   const [playing, setPlaying] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
-
-  const { isPlaying } = usePlaybackStore((state) => state.isPlaying);
 
   useEffect(() => {
     if (!playing) {
