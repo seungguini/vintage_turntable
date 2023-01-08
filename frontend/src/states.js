@@ -7,9 +7,9 @@ const usePlaybackStore = create((set) => ({
   volume: 100,
   actions: {
     // Separating actions from state : https://tkdodo.eu/blog/working-with-zustand#separate-actions-from-state
-    play: set({ isPlaying: true }),
-    pause: set({ isPlaying: false }),
-    mute: set({ volume: 0 }),
+    play: () => set({ isPlaying: true }),
+    pause: () => set({ isPlaying: false }),
+    mute: () => set({ volume: 0 }),
     setVolume: (to) => set({ volume: to }),
   },
 }));
