@@ -15,15 +15,12 @@ export default function Turntable({
   scale,
   rotation,
   position,
-  playing,
   setToneArmFinished,
 }) {
   const group = useRef();
   const modelLocation = "/models/turntable.glb";
   const turntable = useGLTF(modelLocation);
   const { nodes, materials, animations } = turntable;
-  console.log("printing nodes!");
-  console.log(nodes);
   const { actions } = useAnimations(animations, group);
 
   // States + actions from the playbackStore
@@ -43,8 +40,7 @@ export default function Turntable({
   useEffect(() => {
     setToneArmFinished(false);
     const toneArmAction = actions["Tone ArmAction.003"];
-    console.log(toneArmAction);
-    if (playing) {
+    if (isPlaying) {
       toneArmAction.setEffectiveTimeScale(1);
       toneArmAction.paused = false;
       toneArmAction.clampWhenFinished = true;
@@ -57,7 +53,7 @@ export default function Turntable({
     toneArmAction._mixer.addEventListener("finished", () => {
       setToneArmFinished(true);
     });
-  }, [playing]);
+  }, [isPlaying]);
 
   useEffect(() => {
     document.body.style.cursor = hovering ? "pointer" : "auto"; // change pointer to finger when hovered
@@ -65,14 +61,11 @@ export default function Turntable({
 
   // Event handler when hovering over Turntable
   const turntableHoverEnter = () => {
-    console.log("Hovering over turntable");
-
     // Set state
     setHovering(true);
   };
 
   const turntableHoverLeave = () => {
-    console.log("Leaving turntable hover");
     setHovering(false);
   };
 

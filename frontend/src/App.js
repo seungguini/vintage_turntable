@@ -14,6 +14,7 @@ import Turntable from "./components/mainView/Turntable";
 import Camera from "./components/environment/Camera";
 import Lights from "./components/environment/Lights";
 import Buttons from "./components/buttons/Buttons";
+import { useIsPlaying } from "./states";
 
 const song = new Audio("/songs/Daylight.mp3");
 song.volume = 0.01;
@@ -33,21 +34,22 @@ const Scene = () => {
   // Playback States
 
   // Old states -> converted to zustand store
-  const [playing, setPlaying] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
 
+  const isPlaying = useIsPlaying();
+
   useEffect(() => {
-    if (!playing) {
+    if (!isPlaying) {
       console.log("PAUSING AUDIO");
       song.pause();
       toneArmOnSoundeffect.play();
 
       vinylSoundeffect.pause();
     }
-  }, [playing]);
+  }, [isPlaying]);
 
   useEffect(() => {
-    if (playing & toneArmFinished) {
+    if (isPlaying & toneArmFinished) {
       console.log("Play button hit + tone arm moved");
       toneArmOnSoundeffect.play();
       vinylSoundeffect.play();
@@ -148,17 +150,11 @@ const Scene = () => {
           scale={ttScaleSpring.scale}
           rotation={ttRotationSpring.rotation}
           position={ttPositionSpring.position}
-          playing={playing}
           setToneArmFinished={setToneArmFinished}
         />
       </Float>
       {/* <Words opacity={opacity} /> */}
-      <Buttons
-        playing={playing}
-        setPlaying={setPlaying}
-        soundOn={soundOn}
-        setLol={setSoundOn}
-      />
+      <Buttons soundOn={soundOn} setLol={setSoundOn} />
 
       <ContactShadows
         position={[0, -1.4, 0]}
