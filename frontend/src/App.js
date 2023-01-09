@@ -14,7 +14,7 @@ import Turntable from "./components/mainView/Turntable";
 import Camera from "./components/environment/Camera";
 import Lights from "./components/environment/Lights";
 import Buttons from "./components/buttons/Buttons";
-import { useIsPlaying } from "./states";
+import { useIsPlaying, usePlaybackActions, useVolume } from "./states";
 
 const song = new Audio("/songs/Daylight.mp3");
 song.volume = 0.01;
@@ -31,12 +31,13 @@ const Scene = () => {
   const [focused, setFocused] = useState(false); // If Turntable is clicked
   const [toneArmFinished, setToneArmFinished] = useState(false);
 
-  // Playback States
+  // Playback states and actions
+  const isPlaying = useIsPlaying();
+  const volume = useVolume();
+  const { soundIsOn } = usePlaybackActions();
 
   // Old states -> converted to zustand store
-  const [soundOn, setSoundOn] = useState(true);
-
-  const isPlaying = useIsPlaying();
+  // const [soundOn, setSoundOn] = useState(true);
 
   useEffect(() => {
     if (!isPlaying) {
@@ -59,21 +60,19 @@ const Scene = () => {
 
   useEffect(() => {
     console.log("sound on");
-    console.log(soundOn);
-    if (!soundOn) {
+    console.log(soundIsOn());
+    if (!soundIsOn()) {
       toneArmOnSoundeffect.volume = 0;
       song.volume = 0;
     } else {
       toneArmOnSoundeffect.volume = 1;
       song.volume = 0.08;
     }
-  }, [soundOn]);
+  }, [volume]);
 
   // ANIMATIONS
 
   // Camera animation
-
-  const cameraIntroDuration = 5000;
 
   const [enableLookAt, setEnableLookAt] = useState(true);
 
@@ -154,7 +153,7 @@ const Scene = () => {
         />
       </Float>
       {/* <Words opacity={opacity} /> */}
-      <Buttons soundOn={soundOn} setLol={setSoundOn} />
+      <Buttons />
 
       <ContactShadows
         position={[0, -1.4, 0]}

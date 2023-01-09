@@ -12,7 +12,7 @@ import { usePlaybackActions } from "../../states";
 
 useGLTF.preload("/prev_button.glb");
 
-export default function Buttons({ playing, setPlaying, soundOn, setLol }) {
+export default function Buttons() {
   const scaleNormal = 0.03;
   const scalePressed = 0.025;
   const hoveringScale = 0.032;
@@ -20,7 +20,7 @@ export default function Buttons({ playing, setPlaying, soundOn, setLol }) {
 
   // States + actions from the playbackStore
   const isPlaying = useIsPlaying();
-  const { play, pause } = usePlaybackActions();
+  const { play, pause, soundIsOn, mute, unmute } = usePlaybackActions();
 
   // Additional unclick handler for play button
   const playUnclickHandler = () => {
@@ -35,9 +35,12 @@ export default function Buttons({ playing, setPlaying, soundOn, setLol }) {
   };
 
   // Additional unclick handler for sound button
-  const soundUnclickHandler = ({ setLol, soundOn }) => {
-    // setLol(!soundOn);
-    console.log("setting sound option");
+  const soundUnclickHandler = () => {
+    if (soundIsOn()) {
+      mute();
+    } else {
+      unmute();
+    }
   };
 
   return (
@@ -54,7 +57,6 @@ export default function Buttons({ playing, setPlaying, soundOn, setLol }) {
         position={[2, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
         additionalUnclickHandler={soundUnclickHandler}
-        additionalUnclickHandlerConfigs={(setLol, soundOn)}
       />
       <Button
         id="playPauseButton"
@@ -68,7 +70,6 @@ export default function Buttons({ playing, setPlaying, soundOn, setLol }) {
         position={[0, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
         additionalUnclickHandler={playUnclickHandler}
-        additionalUnclickHandlerConfigs={{ setPlaying, playing }}
       />
 
       <Button

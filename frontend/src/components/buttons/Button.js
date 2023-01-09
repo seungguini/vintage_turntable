@@ -16,7 +16,6 @@ export default function Button({
   position,
   rotation,
   additionalUnclickHandler,
-  additionalUnclickHandlerConfigs,
 }) {
   const [pressed, setPressed] = useState(false);
   const [hovering, setHovering] = useState(false);
@@ -35,7 +34,7 @@ export default function Button({
     }
 
     if (additionalUnclickHandler) {
-      additionalUnclickHandler(additionalUnclickHandlerConfigs);
+      additionalUnclickHandler();
     }
   };
 

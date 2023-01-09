@@ -2,7 +2,7 @@ import create from "zustand";
 
 // Store to manage song playback data
 // - playing song, song list, album info, etc.
-const usePlaybackStore = create((set) => ({
+const usePlaybackStore = create((set, get) => ({
   isPlaying: false,
   volume: 100,
   actions: {
@@ -10,7 +10,11 @@ const usePlaybackStore = create((set) => ({
     play: () => set({ isPlaying: true }),
     pause: () => set({ isPlaying: false }),
     mute: () => set({ volume: 0 }),
+    unmute: () => set({ volume: 100 }),
     setVolume: (to) => set({ volume: to }),
+    soundIsOn: () => {
+      return get().volume !== 0;
+    },
   },
 }));
 
