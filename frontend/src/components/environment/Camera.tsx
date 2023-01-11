@@ -17,7 +17,6 @@ interface CameraProps {
 export default function Camera({
   turntablePosition,
   enableLookAt,
-  setEnableLookAt,
   camera,
   mouse,
   position,
@@ -26,8 +25,6 @@ export default function Camera({
   const ref = useRef();
 
   const vec = new THREE.Vector3();
-
-  let lookAtFlag = true;
 
   const cameraMovementScale = 2;
 

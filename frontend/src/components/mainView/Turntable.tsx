@@ -6,8 +6,6 @@ import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 import { animated } from "@react-spring/three";
-import { ObjectMap } from "@react-three/fiber";
-import { GLTF } from "three/examples/jsm/loaders/GLTFLoader"
 
 
 interface TurntableProps {
@@ -25,7 +23,6 @@ interface TurntableProps {
 export default function Turntable({
   setHovering,
   hovering,
-  focused,
   setFocused,
   scale,
   rotation,
@@ -37,7 +34,8 @@ export default function Turntable({
   const modelLocation = "/models/turntable.glb";
   const turntable : any = useGLTF(modelLocation);
   const { nodes, materials, animations } = turntable;
-  console.log(turntable);
+  console.log("printing nodes!");
+  console.log(nodes);
   const { actions } = useAnimations(animations, group);
   // Animations
 

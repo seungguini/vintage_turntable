@@ -2,15 +2,16 @@ import * as React from "react"
 import { Text3D } from "@react-three/drei"
 import { animated, useSpring } from "@react-spring/three";
 
+
+const turntableX = -1.7;
+const turntableY = 2.2;
+const turntableZ = 4;
+
 interface WordsProps {
   opacity: Number
 }
 
 export default function Words({ opacity } : WordsProps) {
-  const x : Number = -1.7;
-  const y : Number = 2.2;
-  const z : Number = 4;
-
   const AnimatedText : any = animated(Text3D);
   const spring2 = useSpring({
     from: { scale: 0 },
@@ -27,12 +28,14 @@ export default function Words({ opacity } : WordsProps) {
         size={0.3}
         height={0.065}
         curveSegments={12}
-        position={[x, y, z]}
-        rotation={[0.5, 0.5, -0.25]} 
+        position={[turntableX, turntableY, turntableZ]}
+        rotation={[0.5, 0.5, -0.25]}
+
         // rotation={[0, -0.35, -0.05]}
       >
         Click the Turntable!
-        <meshStandardMaterial
+        {/* @ts-ignore: https://github.com/pmndrs/react-spring/issues/1515 */}
+        <animated.meshStandardMaterial
           color={[0, 0.3, 0]}
           emissive={[1, 0.1, 0]}
           transparent={true}

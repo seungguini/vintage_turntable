@@ -9,7 +9,7 @@ type AdditionalUnclickHandlerFuncParameters = {
 }
 
 interface ButtonProps {
-  id: string
+  id: string,
   scaleNormal: number
   scalePressed: number
   hoveringScale: number
