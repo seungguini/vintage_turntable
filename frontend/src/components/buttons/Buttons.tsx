@@ -12,17 +12,33 @@ import { usePlaybackActions } from "../../states";
 
 useGLTF.preload("/prev_button.glb");
 
+<<<<<<< HEAD:frontend/src/components/buttons/Buttons.js
 export default function Buttons() {
+=======
+interface ButtonsProps {
+  playing: boolean,
+  setPlaying: () => void,
+  soundOn: boolean,
+  setLol: () => void
+}
+
+interface UnclickType {
+  [key: string]: (first: boolean) => void | boolean
+}
+
+export default function Buttons({ playing, setPlaying, soundOn, setLol } : ButtonsProps) {
+>>>>>>> master:frontend/src/components/buttons/Buttons.tsx
   const scaleNormal = 0.03;
   const scalePressed = 0.025;
   const hoveringScale = 0.032;
-  const springConfig = config.bouncy;
+  const springConfig = config.gentle;
 
   // States + actions from the playbackStore
   const isPlaying = useIsPlaying();
   const { play, pause, soundIsOn, mute, unmute } = usePlaybackActions();
 
   // Additional unclick handler for play button
+<<<<<<< HEAD:frontend/src/components/buttons/Buttons.js
   const playUnclickHandler = () => {
     if (isPlaying) {
       console.log("pausing music");
@@ -31,16 +47,26 @@ export default function Buttons() {
       console.log("playing music");
       play();
     }
+=======
+  const playUnclickHandler = ({ setPlaying, playing } : UnclickType ) => {
+    setPlaying(!playing);
+>>>>>>> master:frontend/src/components/buttons/Buttons.tsx
     console.log("setting play option");
   };
 
   // Additional unclick handler for sound button
+<<<<<<< HEAD:frontend/src/components/buttons/Buttons.js
   const soundUnclickHandler = () => {
     if (soundIsOn()) {
       mute();
     } else {
       unmute();
     }
+=======
+  const soundUnclickHandler = ({ setLol, soundOn } : UnclickType) => {
+    // setLol(!soundOn);
+    console.log("setting sound option");
+>>>>>>> master:frontend/src/components/buttons/Buttons.tsx
   };
 
   return (
@@ -52,11 +78,15 @@ export default function Buttons() {
         hoveringScale={hoveringScale}
         springConfig={springConfig}
         switchButton={true}
-        modelPath1={"/models/buttons/soundon_button.glb"}
-        modelPath2={"/models/buttons/soundoff_button.glb"}
+        modelPathOne={"/models/buttons/soundon_button.glb"}
+        modelPathTwo={"/models/buttons/soundoff_button.glb"}
         position={[2, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
         additionalUnclickHandler={soundUnclickHandler}
+<<<<<<< HEAD:frontend/src/components/buttons/Buttons.js
+=======
+        additionalUnclickHandlerConfigs={{setLol, soundOn}}
+>>>>>>> master:frontend/src/components/buttons/Buttons.tsx
       />
       <Button
         id="playPauseButton"
@@ -65,8 +95,8 @@ export default function Buttons() {
         hoveringScale={hoveringScale}
         springConfig={springConfig}
         switchButton={true}
-        modelPath1={"/models/buttons/play_button.glb"}
-        modelPath2={"/models/buttons/pause_button.glb"}
+        modelPathOne={"/models/buttons/play_button.glb"}
+        modelPathTwo={"/models/buttons/pause_button.glb"}
         position={[0, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
         additionalUnclickHandler={playUnclickHandler}
@@ -79,10 +109,12 @@ export default function Buttons() {
         hoveringScale={hoveringScale}
         springConfig={springConfig}
         switchButton={true}
-        modelPath1={"/models/buttons/next_button.glb"}
-        modelPath2={"/models/buttons/next_button.glb"}
+        modelPathOne={"/models/buttons/next_button.glb"}
+        modelPathTwo={"/models/buttons/next_button.glb"}
         position={[1, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
+        additionalUnclickHandler={() => {}}
+        additionalUnclickHandlerConfigs={{}}
       />
       <Button
         id="prevButton"
@@ -90,10 +122,13 @@ export default function Buttons() {
         scalePressed={scalePressed}
         hoveringScale={hoveringScale}
         springConfig={springConfig}
-        modelPath1={"/models/buttons/prev_button.glb"}
-        modelPath2={"/models/buttons/prev_button.glb"}
+        switchButton={true}
+        modelPathOne={"/models/buttons/prev_button.glb"}
+        modelPathTwo={"/models/buttons/prev_button.glb"}
         position={[-1, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
+        additionalUnclickHandler={() => {}}
+        additionalUnclickHandlerConfigs={{}}
       />
       <Button
         id="homeButton"
@@ -101,13 +136,15 @@ export default function Buttons() {
         scalePressed={0.7}
         hoveringScale={0.9}
         springConfig={springConfig}
-        modelPath1={"/models/buttons/home_button.glb"}
-        modelPath2={"/models/buttons/home_button.glb"}
+        switchButton={true}
+        modelPathOne={"/models/buttons/home_button.glb"}
+        modelPathTwo={"/models/buttons/home_button.glb"}
         position={[-1.85, -0.65, 4.5]}
         rotation={[Math.PI * 0.12, Math.PI * 0.16, -Math.PI * 0.08]}
         additionalUnclickHandler={() => {
           window.open("https://github.com/seungguini/vintage_turntable");
         }}
+        additionalUnclickHandlerConfigs={{}}
       />
     </>
   );

@@ -4,14 +4,24 @@ import { useFrame } from "@react-three/fiber";
 import React, { useRef } from "react";
 import * as THREE from "three";
 
-const Camera = ({
+interface CameraProps {
+  turntablePosition: Array<number>
+  enableLookAt: boolean
+  setEnableLookAt: boolean
+  camera: THREE.Camera
+  mouse: THREE.Vector2
+  position: THREE.Vector3
+  focused: boolean
+}
+
+export default function Camera({
   turntablePosition,
   enableLookAt,
   camera,
   mouse,
   position,
   focused,
-}) => {
+} : CameraProps) {
   const ref = useRef();
 
   const vec = new THREE.Vector3();
@@ -41,7 +51,6 @@ const Camera = ({
     // console.log(position);
   });
 
-  // Animate initial camera movement
   const AnimatedPerspectiveCamera = animated(PerspectiveCamera);
 
   return (
@@ -54,6 +63,4 @@ const Camera = ({
       />
     </>
   );
-};
-
-export default Camera;
+}

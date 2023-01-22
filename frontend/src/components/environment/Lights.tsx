@@ -1,4 +1,5 @@
-import React from "react";
+import '@react-three/fiber'
+import * as React from "react"
 
 const Lights = () => {
   return (
