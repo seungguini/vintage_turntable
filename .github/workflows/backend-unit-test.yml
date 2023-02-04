@@ -1,0 +1,19 @@
+name: Backend Unit Tests
+on: [push]
+jobs:
+  unit-tests:
+    name: unit-tests
+    runs-on: ubuntu-latest
+    env:
+      SPOTIFY_CLIENT_ID: ${{secrets.SPOTIFY_CLIENT_ID}}
+      SPOTIFY_CLIENT_SECRET: ${{secrets.SPOTIFY_CLIENT_SECRET}}
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: npm test
