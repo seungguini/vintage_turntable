@@ -1,8 +1,21 @@
 import create from "zustand";
 
+type PlayBackStoreType = {
+  isPlaying: Boolean,
+  volume: Number,
+  actions: {
+    play: () => void,
+    pause: () => void,
+    mute: () => void,
+    unmute: () => void,
+    setVolume: (to: Number) => void
+    soundIsOn: () => Boolean
+  }
+};
+
 // Store to manage song playback data
 // - playing song, song list, album info, etc.
-const usePlaybackStore = create((set, get) => ({
+const usePlaybackStore = create<PlayBackStoreType>( (set, get) => ({
   isPlaying: false,
   volume: 100,
   actions: {

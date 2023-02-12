@@ -12,9 +12,6 @@ import { usePlaybackActions } from "../../states";
 
 useGLTF.preload("/prev_button.glb");
 
-<<<<<<< HEAD:frontend/src/components/buttons/Buttons.js
-export default function Buttons() {
-=======
 interface ButtonsProps {
   playing: boolean,
   setPlaying: () => void,
@@ -27,7 +24,6 @@ interface UnclickType {
 }
 
 export default function Buttons({ playing, setPlaying, soundOn, setLol } : ButtonsProps) {
->>>>>>> master:frontend/src/components/buttons/Buttons.tsx
   const scaleNormal = 0.03;
   const scalePressed = 0.025;
   const hoveringScale = 0.032;
@@ -38,35 +34,15 @@ export default function Buttons({ playing, setPlaying, soundOn, setLol } : Butto
   const { play, pause, soundIsOn, mute, unmute } = usePlaybackActions();
 
   // Additional unclick handler for play button
-<<<<<<< HEAD:frontend/src/components/buttons/Buttons.js
-  const playUnclickHandler = () => {
-    if (isPlaying) {
-      console.log("pausing music");
-      pause();
-    } else {
-      console.log("playing music");
-      play();
-    }
-=======
   const playUnclickHandler = ({ setPlaying, playing } : UnclickType ) => {
     setPlaying(!playing);
->>>>>>> master:frontend/src/components/buttons/Buttons.tsx
     console.log("setting play option");
   };
 
   // Additional unclick handler for sound button
-<<<<<<< HEAD:frontend/src/components/buttons/Buttons.js
-  const soundUnclickHandler = () => {
-    if (soundIsOn()) {
-      mute();
-    } else {
-      unmute();
-    }
-=======
   const soundUnclickHandler = ({ setLol, soundOn } : UnclickType) => {
     // setLol(!soundOn);
     console.log("setting sound option");
->>>>>>> master:frontend/src/components/buttons/Buttons.tsx
   };
 
   return (
@@ -83,10 +59,7 @@ export default function Buttons({ playing, setPlaying, soundOn, setLol } : Butto
         position={[2, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
         additionalUnclickHandler={soundUnclickHandler}
-<<<<<<< HEAD:frontend/src/components/buttons/Buttons.js
-=======
         additionalUnclickHandlerConfigs={{setLol, soundOn}}
->>>>>>> master:frontend/src/components/buttons/Buttons.tsx
       />
       <Button
         id="playPauseButton"
@@ -100,6 +73,7 @@ export default function Buttons({ playing, setPlaying, soundOn, setLol } : Butto
         position={[0, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
         additionalUnclickHandler={playUnclickHandler}
+        additionalUnclickHandlerConfigs={{}}
       />
 
       <Button

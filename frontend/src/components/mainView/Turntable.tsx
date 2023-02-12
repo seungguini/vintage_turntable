@@ -29,11 +29,8 @@ export default function Turntable({
   rotation,
   position,
   setToneArmFinished,
-}) {
-  const group = useRef();
-  playing,
-  setToneArmFinished
-} : TurntableProps) {
+  playing
+} : TurntableProps)   {
   const group : any = useRef();
   const modelLocation = "/models/turntable.glb";
   const turntable : any = useGLTF(modelLocation);

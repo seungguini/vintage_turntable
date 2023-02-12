@@ -15,7 +15,6 @@ import Camera from "./components/environment/Camera";
 import Lights from "./components/environment/Lights";
 import Buttons from "./components/buttons/Buttons";
 import { useIsPlaying, usePlaybackActions, useVolume } from "./states";
-import Lights from "./components/environment/Lights"
 
 const song = new Audio("/songs/Daylight.mp3");
 song.volume = 0.01;
