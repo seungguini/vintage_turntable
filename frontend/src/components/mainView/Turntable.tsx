@@ -55,7 +55,7 @@ export default function Turntable({
     setToneArmFinished(false);
     const toneArmAction : any = actions["Tone ArmAction.003"];
     console.log(toneArmAction);
-    if (playing) {
+    if (isPlaying) {
       toneArmAction.setEffectiveTimeScale(1);
       toneArmAction.paused = false;
       toneArmAction.clampWhenFinished = true;
