@@ -4,9 +4,6 @@ import React from "react";
 
 import { useEffect, useState } from "react";
 
-type AdditionalUnclickHandlerFuncParameters = {
-  [key: string]: () => void | boolean
-}
 
 interface ButtonProps {
   id: string,
@@ -22,10 +19,8 @@ interface ButtonProps {
   modelPathTwo: string // Optional
   position: Array<number>
   rotation: Array<number>
-  additionalUnclickHandler: (
-    {}: AdditionalUnclickHandlerFuncParameters | any
-  ) => void
-  additionalUnclickHandlerConfigs: AdditionalUnclickHandlerFuncParameters | any
+  actionHandler: () => void,
+  
 }
 
 export default function Button({
@@ -39,38 +34,35 @@ export default function Button({
   modelPathTwo, // Optional
   position,
   rotation,
-  additionalUnclickHandler,
-  additionalUnclickHandlerConfigs,
+  actionHandler,
 } : ButtonProps) {
-  const [pressed, setPressed] = useState<boolean>(false);
-  const [hovering, setHovering] = useState<boolean>(false);
+  const [isShrunk, setShrunk] = useState<boolean>(false);
+  const [isHovering, setHovering] = useState<boolean>(false);
   const [showModelOne, setShowModelOne] = useState<boolean>(true);
   let modelOne = useGLTF(modelPathOne).scene; // Type is insane
   let modelTwo = useGLTF(modelPathTwo).scene; // Type is insane
 
   const clickHandler = () => {
-    setPressed(true);
-  };
+    setShrunk(true)
+  }
 
-  const unclickHandler = () => {
-    setPressed(false);
+  const unclickHandler = () => { 
+    setShrunk(false)
+    actionHandler()
     if (switchButton) {
       setShowModelOne(!showModelOne);
     }
+  }
 
-    if (additionalUnclickHandler) {
-      additionalUnclickHandler(additionalUnclickHandlerConfigs);
-    }
-  };
 
   const { scale } = useSpring({
-    scale: !pressed ? (!hovering ? scaleNormal : hoveringScale) : scalePressed,
+    scale: !isShrunk ? (!isHovering ? scaleNormal : hoveringScale) : scalePressed,
     config: springConfig,
   })
 
   useEffect(() => {
-    document.body.style.cursor = hovering ? "pointer" : "auto"; // change pointer to finger when hovered
-  }, [hovering]);
+    document.body.style.cursor = isHovering ? "pointer" : "auto"; // change pointer to finger when hovered
+  }, [isHovering]);
 
   return (
     <>

@@ -31,23 +31,28 @@ export default function Buttons({ playing, setPlaying, soundOn, setLol } : Butto
 
   // States + actions from the playbackStore
   const isPlaying = useIsPlaying();
-  const { play, pause, soundIsOn, mute, unmute } = usePlaybackActions();
+  const { play, pause, } = usePlaybackActions();
 
   // Additional unclick handler for play button
-  const playUnclickHandler = ({ setPlaying, playing } : UnclickType ) => {
-    setPlaying(!playing);
-    console.log("setting play option");
+  const playClickHandler = () => {
+    if (isPlaying) {
+      pause()
+      console.log("setting Zustand pause")
+    } else {
+      play()
+      console.log("setting Zustand play")
+    }
   };
 
   // Additional unclick handler for sound button
-  const soundUnclickHandler = ({ setLol, soundOn } : UnclickType) => {
+  const soundClickHandler = ({ setLol, soundOn } : UnclickType) => {
     // setLol(!soundOn);
     console.log("setting sound option");
   };
 
   return (
     <>
-      <Button
+      {/* <Button
         id="soundOnOffButton"
         scaleNormal={scaleNormal}
         scalePressed={scalePressed}
@@ -58,9 +63,8 @@ export default function Buttons({ playing, setPlaying, soundOn, setLol } : Butto
         modelPathTwo={"/models/buttons/soundoff_button.glb"}
         position={[2, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
-        additionalUnclickHandler={soundUnclickHandler}
-        additionalUnclickHandlerConfigs={{setLol, soundOn}}
-      />
+        actionHandler={soundClickHandler}
+      /> */}
       <Button
         id="playPauseButton"
         scaleNormal={scaleNormal}
@@ -72,11 +76,11 @@ export default function Buttons({ playing, setPlaying, soundOn, setLol } : Butto
         modelPathTwo={"/models/buttons/pause_button.glb"}
         position={[0, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
-        additionalUnclickHandler={playUnclickHandler}
-        additionalUnclickHandlerConfigs={{}}
+        actionHandler={playClickHandler}
+        
       />
 
-      <Button
+      {/* <Button
         id="nextButton"
         scaleNormal={scaleNormal}
         scalePressed={scalePressed}
@@ -87,8 +91,7 @@ export default function Buttons({ playing, setPlaying, soundOn, setLol } : Butto
         modelPathTwo={"/models/buttons/next_button.glb"}
         position={[1, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
-        additionalUnclickHandler={() => {}}
-        additionalUnclickHandlerConfigs={{}}
+        
       />
       <Button
         id="prevButton"
@@ -101,9 +104,8 @@ export default function Buttons({ playing, setPlaying, soundOn, setLol } : Butto
         modelPathTwo={"/models/buttons/prev_button.glb"}
         position={[-1, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
-        additionalUnclickHandler={() => {}}
-        additionalUnclickHandlerConfigs={{}}
-      />
+        
+      /> */}
       <Button
         id="homeButton"
         scaleNormal={0.8}
@@ -115,10 +117,12 @@ export default function Buttons({ playing, setPlaying, soundOn, setLol } : Butto
         modelPathTwo={"/models/buttons/home_button.glb"}
         position={[-1.85, -0.65, 4.5]}
         rotation={[Math.PI * 0.12, Math.PI * 0.16, -Math.PI * 0.08]}
-        additionalUnclickHandler={() => {
-          window.open("https://github.com/seungguini/vintage_turntable");
-        }}
-        additionalUnclickHandlerConfigs={{}}
+        actionHandler={
+          () => {
+            window.open("https://github.com/seungguini/vintage_turntable");
+          }
+        }
+        
       />
     </>
   );

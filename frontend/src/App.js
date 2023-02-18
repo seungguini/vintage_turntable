@@ -46,6 +46,8 @@ const Scene = () => {
       toneArmOnSoundeffect.play();
 
       vinylSoundeffect.pause();
+    } else {
+      console.log("PLAYING AUDIO");
     }
   }, [isPlaying]);
 
