@@ -1,52 +1,51 @@
-import { animated, useSpring } from "@react-spring/three";
+import { animated, useSpring, config } from "@react-spring/three";
 import { useGLTF } from "@react-three/drei";
 import React from "react";
 
 import { useEffect, useState } from "react";
 
-type AdditionalUnclickHandlerFuncParameters = {
-  [key: string]: () => void | boolean
+interface SpringProps {
+  scaleNormal?: number,
+  scalePressed?: number,
+  scaleHovering?: number,
+  config?: {
+    tension: number,
+    friction: number
+  }
+}
+
+const DEFAULT_SPRING_VALUES : SpringProps = {
+  scaleNormal: 0.03,
+  scalePressed: 0.025,
+  scaleHovering: 0.032,
+  config: {
+    tension: config.gentle.tension,
+    friction: config.gentle.friction
+  }
 }
 
 interface ButtonProps {
   id: string,
-  scaleNormal: number
-  scalePressed: number
-  hoveringScale: number
-  springConfig: {
-    tension: number,
-    friction: number
-  }
-  switchButton: boolean
-  modelPathOne: string
-  modelPathTwo: string // Optional
+  modelPath: string
   position: Array<number>
   rotation: Array<number>
-  additionalUnclickHandler: (
-    {}: AdditionalUnclickHandlerFuncParameters | any
-  ) => void
-  additionalUnclickHandlerConfigs: AdditionalUnclickHandlerFuncParameters | any
+  modelPathAlternative?: string
+  spring?: SpringProps,
 }
 
 export default function Button({
   id,
-  scaleNormal,
-  scalePressed,
-  hoveringScale,
-  springConfig,
-  switchButton,
-  modelPathOne,
-  modelPathTwo, // Optional
+  modelPath,
   position,
   rotation,
-  additionalUnclickHandler,
-  additionalUnclickHandlerConfigs,
+  modelPathAlternative = modelPath, // Optional
+  spring = DEFAULT_SPRING_VALUES,
 } : ButtonProps) {
   const [pressed, setPressed] = useState<boolean>(false);
   const [hovering, setHovering] = useState<boolean>(false);
-  const [showModelOne, setShowModelOne] = useState<boolean>(true);
-  let modelOne = useGLTF(modelPathOne).scene; // Type is insane
-  let modelTwo = useGLTF(modelPathTwo).scene; // Type is insane
+  const [showDefaultModel, setShowDefaultModel] = useState<boolean>(true);
+  let modelDefault = useGLTF(modelPath).scene; // Type is insane
+  let modelAlternate = useGLTF(modelPathAlternative).scene; // Type is insane
 
   const clickHandler = () => {
     setPressed(true);
@@ -54,18 +53,14 @@ export default function Button({
 
   const unclickHandler = () => {
     setPressed(false);
-    if (switchButton) {
-      setShowModelOne(!showModelOne);
-    }
-
-    if (additionalUnclickHandler) {
-      additionalUnclickHandler(additionalUnclickHandlerConfigs);
+    if (modelPath !== modelPathAlternative) {
+      setShowDefaultModel(!showDefaultModel);
     }
   };
 
   const { scale } = useSpring({
-    scale: !pressed ? (!hovering ? scaleNormal : hoveringScale) : scalePressed,
-    config: springConfig,
+    scale: !pressed ? (!hovering ? spring.scaleNormal : spring.scaleHovering) : spring.scalePressed,
+    config: spring.config,
   })
 
   useEffect(() => {
@@ -79,7 +74,7 @@ export default function Button({
         position={position}
         rotation={rotation}
         scale={scale}
-        object={switchButton ? (showModelOne ? modelOne : modelTwo) : modelOne}
+        object={showDefaultModel ? modelDefault : modelAlternate}
         onPointerDown={clickHandler}
         onPointerUp={unclickHandler}
         onPointerEnter={() => setHovering(true)}
