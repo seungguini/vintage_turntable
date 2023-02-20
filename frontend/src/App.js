@@ -9,12 +9,11 @@ import {
 } from "@react-three/drei";
 import { useSpring, easings, useSpringRef } from "@react-spring/three";
 
-// Load turntable 3D model
 import Turntable from "./components/mainView/Turntable";
 import Camera from "./components/environment/Camera";
 import Lights from "./components/environment/Lights";
 import Buttons from "./components/buttons/Buttons";
-import { useIsPlaying, usePlaybackActions, useVolume } from "./states";
+import { useVolume, useIsPlaying, usePlaybackActions } from "./states";
 
 const song = new Audio("/songs/Daylight.mp3");
 song.volume = 0.01;
@@ -24,9 +23,9 @@ const vinylSoundeffect = new Audio("/soundeffects/vinyl_soundeffect.mp3");
 vinylSoundeffect.volume = 1;
 vinylSoundeffect.loop = true;
 
+// The base ThreeJS component which renders the scene
 const Scene = () => {
   // States
-  // const [turntablePosition, setTurntablePosition] = useState([0, -0.24, 0]);
   const [hovering, setHovering] = useState(false);
   const [focused, setFocused] = useState(false); // If Turntable is clicked
   const [toneArmFinished, setToneArmFinished] = useState(false);
@@ -34,23 +33,17 @@ const Scene = () => {
   // Playback states and actions
   const isPlaying = useIsPlaying();
   const volume = useVolume();
-  const { soundIsOn } = usePlaybackActions();
-
-  // Old states -> converted to zustand store
-  // const [soundOn, setSoundOn] = useState(true);
+  const { isMute } = usePlaybackActions();
 
   useEffect(() => {
     if (!isPlaying) {
-      console.log("PAUSING AUDIO");
       song.pause();
       toneArmOnSoundeffect.play();
-
       vinylSoundeffect.pause();
-    } else {
-      console.log("PLAYING AUDIO");
     }
   }, [isPlaying]);
 
+  // Song plays only when the tone arm moves onto the record
   useEffect(() => {
     if (isPlaying & toneArmFinished) {
       console.log("Play button hit + tone arm moved");
@@ -61,21 +54,11 @@ const Scene = () => {
   }, [toneArmFinished]);
 
   useEffect(() => {
-    console.log("sound on");
-    console.log(soundIsOn());
-    if (!soundIsOn()) {
-      toneArmOnSoundeffect.volume = 0;
-      song.volume = 0;
-    } else {
-      toneArmOnSoundeffect.volume = 1;
-      song.volume = 0.08;
-    }
+    toneArmOnSoundeffect.volume = volume;
+    song.volume = volume;
   }, [volume]);
 
   // ANIMATIONS
-
-  // Camera animation
-
   const [enableLookAt, setEnableLookAt] = useState(true);
 
   const cameraMoveRef = useSpringRef();
