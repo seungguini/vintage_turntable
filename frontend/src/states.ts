@@ -13,8 +13,6 @@ type PlayBackStoreType = {
   };
 };
 
-// Store to manage song playback data
-// - playing song, song list, album info, etc.
 const usePlaybackStore = create<PlayBackStoreType>((set, get) => ({
   isPlaying: false,
   volume: 1,

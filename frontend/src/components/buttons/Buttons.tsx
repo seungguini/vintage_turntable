@@ -34,7 +34,6 @@ export default function Buttons() {
     } else {
       mute()
     }
-
   };
 
   return (
@@ -67,7 +66,7 @@ export default function Buttons() {
         
       />
 
-      {/* <Button
+      <Button
         id="nextButton"
         scaleNormal={scaleNormal}
         scalePressed={scalePressed}
@@ -78,7 +77,7 @@ export default function Buttons() {
         modelPathTwo={"/models/buttons/next_button.glb"}
         position={[1, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
-        
+        actionHandler={() => {}}
       />
       <Button
         id="prevButton"
@@ -91,8 +90,9 @@ export default function Buttons() {
         modelPathTwo={"/models/buttons/prev_button.glb"}
         position={[-1, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
-        
-      /> */}
+        actionHandler={() => {}}
+
+      />
       <Button
         id="homeButton"
         scaleNormal={0.8}

@@ -33,8 +33,8 @@ const Scene = () => {
   // Playback states and actions
   const isPlaying = useIsPlaying();
   const volume = useVolume();
-  const { isMute } = usePlaybackActions();
 
+  //  Pause song
   useEffect(() => {
     if (!isPlaying) {
       song.pause();
