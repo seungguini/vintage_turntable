@@ -1,5 +1,4 @@
 import React from "react";
-import { config } from "@react-spring/three";
 import { useGLTF } from "@react-three/drei";
 
 import Button from "./Button";
