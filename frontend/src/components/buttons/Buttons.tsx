@@ -9,22 +9,6 @@ useGLTF.preload("/prev_button.glb");
 
 export default function Buttons() {
 
-  // Additional unclick handler for play button
-  // const playUnclickHandler = ({ setPlaying, playing } : UnclickType ) => {
-  //   setPlaying(!playing);
-  //   console.log("setting play option");
-  // };
-
-  // Additional unclick handler for sound button
-  // const soundUnclickHandler = ({ setLol, soundOn } : UnclickType) => {
-  //   // setLol(!soundOn);
-  //   console.log("setting sound option");
-  // };
-  const scaleNormal = 0.03;
-  const scalePressed = 0.025;
-  const hoveringScale = 0.032;
-  const springConfig = config.gentle;
-
   const isPlaying = useIsPlaying();
   const { play, pause, mute, unmute, isMute } = usePlaybackActions();
 
