@@ -49,8 +49,10 @@ export default function Turntable({
     toneArmAction.timeScale = 1;
     toneArmAction.setLoop(THREE.LoopOnce, 1);
     toneArmAction.play();
-  }, []);
+  }, [])
 
+
+  // Looks at whether the song is playing, and animates tone arm accordingly
   useEffect(() => {
     setToneArmFinished(false);
     const toneArmAction : any = actions["Tone ArmAction.003"];

@@ -1,17 +1,19 @@
 import create from "zustand";
 
-type PlayBackStoreType = {
-  isPlaying: Boolean;
-  volume: Number;
-  actions: {
-    play: () => void;
-    pause: () => void;
-    mute: () => void;
-    unmute: () => void;
-    setVolume: (to: Number) => void;
-    isMute: () => Boolean;
-  };
+interface PlayBackStoreType {
+  isPlaying: boolean;
+  volume: number;
+  actions: PlaybackActions
 };
+
+interface PlaybackActions {
+  play: () => void;
+  pause: () => void;
+  mute: () => void;
+  unmute: () => void;
+  setVolume: (to: number) => void;
+  isMute: () => boolean;
+}
 
 const usePlaybackStore = create<PlayBackStoreType>((set, get) => ({
   isPlaying: false,
@@ -34,7 +36,7 @@ const usePlaybackStore = create<PlayBackStoreType>((set, get) => ({
 // Custom hooks
 // helps prevent user from subscribing to the entire store
 // reference : https://tkdodo.eu/blog/working-with-zustand#only-export-custom-hooks
-export const useIsPlaying = () => usePlaybackStore((state) => state.isPlaying);
-export const useVolume = () => usePlaybackStore((state) => state.volume);
-export const usePlaybackActions = () =>
+export const useIsPlaying = (): boolean => usePlaybackStore((state) => state.isPlaying);
+export const useVolume = (): number => usePlaybackStore((state) => state.volume);
+export const usePlaybackActions = (): PlaybackActions =>
   usePlaybackStore((state) => state.actions);
