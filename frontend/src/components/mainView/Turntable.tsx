@@ -6,6 +6,7 @@ import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 import { animated } from "@react-spring/three";
+import { useIsPlaying } from "../../states";
 
 
 interface TurntableProps {
@@ -27,18 +28,19 @@ export default function Turntable({
   scale,
   rotation,
   position,
-  playing,
-  setToneArmFinished
-} : TurntableProps) {
+  setToneArmFinished,
+  playing
+} : TurntableProps)   {
   const group : any = useRef();
   const modelLocation = "/models/turntable.glb";
   const turntable : any = useGLTF(modelLocation);
   const { nodes, materials, animations } = turntable;
-  console.log("printing nodes!");
-  console.log(nodes);
   const { actions } = useAnimations(animations, group);
-  // Animations
 
+  // States + actions from the playbackStore
+  const isPlaying = useIsPlaying();
+
+  // Animations
   useEffect(() => {
     const toneArmAction : any = actions["Tone ArmAction.003"];
 
@@ -47,13 +49,15 @@ export default function Turntable({
     toneArmAction.timeScale = 1;
     toneArmAction.setLoop(THREE.LoopOnce, 1);
     toneArmAction.play();
-  }, []);
+  }, [])
 
+
+  // Looks at whether the song is playing, and animates tone arm accordingly
   useEffect(() => {
     setToneArmFinished(false);
     const toneArmAction : any = actions["Tone ArmAction.003"];
     console.log(toneArmAction);
-    if (playing) {
+    if (isPlaying) {
       toneArmAction.setEffectiveTimeScale(1);
       toneArmAction.paused = false;
       toneArmAction.clampWhenFinished = true;
@@ -66,7 +70,7 @@ export default function Turntable({
     toneArmAction._mixer.addEventListener("finished", () => {
       setToneArmFinished(true);
     });
-  }, [playing]);
+  }, [isPlaying]);
 
   useEffect(() => {
     document.body.style.cursor = hovering ? "pointer" : "auto"; // change pointer to finger when hovered
@@ -74,14 +78,11 @@ export default function Turntable({
 
   // Event handler when hovering over Turntable
   const turntableHoverEnter = () => {
-    console.log("Hovering over turntable");
-
     // Set state
     setHovering(true);
   };
 
   const turntableHoverLeave = () => {
-    console.log("Leaving turntable hover");
     setHovering(false);
   };
 

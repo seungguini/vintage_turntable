@@ -9,11 +9,11 @@ import {
 } from "@react-three/drei";
 import { useSpring, easings, useSpringRef } from "@react-spring/three";
 
-// Load turntable 3D model
 import Turntable from "./components/mainView/Turntable";
 import Camera from "./components/environment/Camera";
+import Lights from "./components/environment/Lights";
 import Buttons from "./components/buttons/Buttons";
-import Lights from "./components/environment/Lights"
+import { useVolume, useIsPlaying, usePlaybackActions } from "./states";
 
 const song = new Audio("/songs/Daylight.mp3");
 song.volume = 0.01;
@@ -23,29 +23,29 @@ const vinylSoundeffect = new Audio("/soundeffects/vinyl_soundeffect.mp3");
 vinylSoundeffect.volume = 1;
 vinylSoundeffect.loop = true;
 
+// The base ThreeJS component which renders the scene
 const Scene = () => {
   // States
-  // const [turntablePosition, setTurntablePosition] = useState([0, -0.24, 0]);
   const [hovering, setHovering] = useState(false);
   const [focused, setFocused] = useState(false); // If Turntable is clicked
-  const [playing, setPlaying] = useState(false);
-  const [soundOn, setSoundOn] = useState(true);
   const [toneArmFinished, setToneArmFinished] = useState(false);
 
-  // AUDIO
+  // Playback states and actions
+  const isPlaying = useIsPlaying();
+  const volume = useVolume();
 
+  //  Pause song
   useEffect(() => {
-    if (!playing) {
-      console.log("PAUSING AUDIO");
+    if (!isPlaying) {
       song.pause();
       toneArmOnSoundeffect.play();
-
       vinylSoundeffect.pause();
     }
-  }, [playing]);
+  }, [isPlaying]);
 
+  // Song plays only when the tone arm moves onto the record
   useEffect(() => {
-    if (playing & toneArmFinished) {
+    if (isPlaying & toneArmFinished) {
       console.log("Play button hit + tone arm moved");
       toneArmOnSoundeffect.play();
       vinylSoundeffect.play();
@@ -54,23 +54,11 @@ const Scene = () => {
   }, [toneArmFinished]);
 
   useEffect(() => {
-    console.log("sound on");
-    console.log(soundOn);
-    if (!soundOn) {
-      toneArmOnSoundeffect.volume = 0;
-      song.volume = 0;
-    } else {
-      toneArmOnSoundeffect.volume = 1;
-      song.volume = 0.08;
-    }
-  }, [soundOn]);
+    toneArmOnSoundeffect.volume = volume;
+    song.volume = volume;
+  }, [volume]);
 
   // ANIMATIONS
-
-  // Camera animation
-
-  const cameraIntroDuration = 5000;
-
   const [enableLookAt, setEnableLookAt] = useState(true);
 
   const cameraMoveRef = useSpringRef();
@@ -146,17 +134,11 @@ const Scene = () => {
           scale={ttScaleSpring.scale}
           rotation={ttRotationSpring.rotation}
           position={ttPositionSpring.position}
-          playing={playing}
           setToneArmFinished={setToneArmFinished}
         />
       </Float>
       {/* <Words opacity={opacity} /> */}
-      <Buttons
-        playing={playing}
-        setPlaying={setPlaying}
-        soundOn={soundOn}
-        setLol={setSoundOn}
-      />
+      <Buttons />
 
       <ContactShadows
         position={[0, -1.4, 0]}
