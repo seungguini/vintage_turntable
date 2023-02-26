@@ -1,46 +1,53 @@
-import { animated, useSpring } from "@react-spring/three";
+import { animated, useSpring, config } from "@react-spring/three";
 import { useGLTF } from "@react-three/drei";
 import React from "react";
 
 import { useEffect, useState } from "react";
 
-
-interface ButtonProps {
-  id: string,
-  scaleNormal: number
-  scalePressed: number
-  hoveringScale: number
-  springConfig: {
+interface SpringProps {
+  scaleNormal?: number,
+  scalePressed?: number,
+  scaleHovering?: number,
+  config?: {
     tension: number,
     friction: number
   }
-  switchButton: boolean
-  modelPathOne: string
-  modelPathTwo: string // Optional
+}
+
+const DEFAULT_SPRING_VALUES : SpringProps = {
+  scaleNormal: 0.03,
+  scalePressed: 0.025,
+  scaleHovering: 0.032,
+  config: {
+    tension: config.gentle.tension,
+    friction: config.gentle.friction
+  }
+}
+
+interface ButtonProps {
+  id: string,
+  modelPath: string
   position: Array<number>
   rotation: Array<number>
   actionHandler: () => void,
-  
+  modelPathAlternative?: string
+  spring?: SpringProps
 }
 
 export default function Button({
   id,
-  scaleNormal,
-  scalePressed,
-  hoveringScale,
-  springConfig,
-  switchButton,
-  modelPathOne,
-  modelPathTwo, // Optional
+  modelPath,
   position,
   rotation,
   actionHandler,
+  modelPathAlternative = modelPath, // Optional. If none is passed in, the alternate path is the default
+  spring = DEFAULT_SPRING_VALUES, // Optional
 } : ButtonProps) {
   const [isShrunk, setShrunk] = useState<boolean>(false);
   const [isHovering, setHovering] = useState<boolean>(false);
-  const [showModelOne, setShowModelOne] = useState<boolean>(true);
-  let modelOne = useGLTF(modelPathOne).scene; // Type is insane
-  let modelTwo = useGLTF(modelPathTwo).scene; // Type is insane
+  const [showDefaultModel, setShowDefaultModel] = useState<boolean>(true);
+  let modelDefault = useGLTF(modelPath).scene; // Type is insane
+  let modelAlternate = useGLTF(modelPathAlternative).scene; // Type is insane
 
   const clickHandler = () => {
     setShrunk(true)
@@ -49,15 +56,14 @@ export default function Button({
   const unclickHandler = () => { 
     setShrunk(false)
     actionHandler()
-    if (switchButton) {
-      setShowModelOne(!showModelOne);
+    if (modelPath !== modelPathAlternative) {
+      setShowDefaultModel(!showDefaultModel);
     }
   }
 
-
   const { scale } = useSpring({
-    scale: !isShrunk ? (!isHovering ? scaleNormal : hoveringScale) : scalePressed,
-    config: springConfig,
+    scale: !isShrunk ? (!isHovering ? spring.scaleNormal : spring.scaleHovering) : spring.scalePressed,
+    config: spring.config,
   })
 
   useEffect(() => {
@@ -71,7 +77,7 @@ export default function Button({
         position={position}
         rotation={rotation}
         scale={scale}
-        object={switchButton ? (showModelOne ? modelOne : modelTwo) : modelOne}
+        object={showDefaultModel ? modelDefault : modelAlternate}
         onPointerDown={clickHandler}
         onPointerUp={unclickHandler}
         onPointerEnter={() => setHovering(true)}
