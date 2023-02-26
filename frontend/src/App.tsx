@@ -111,12 +111,12 @@ const Scene = () => {
   return (
     <>
       <Camera
-        makeDefault
         turntablePosition={[0, -0.24, 0]}
         camera={camera}
         mouse={mouse}
         enableLookAt={enableLookAt}
         setEnableLookAt={setEnableLookAt}
+        // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
         position={position}
         focused={focused}
       />
@@ -133,8 +133,11 @@ const Scene = () => {
           setHovering={setHovering}
           focused={focused}
           setFocused={setFocused}
+          // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
           scale={ttScaleSpring.scale}
+          // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
           rotation={ttRotationSpring.rotation}
+          // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)          
           position={ttPositionSpring.position}
           setToneArmFinished={setToneArmFinished}
         />
