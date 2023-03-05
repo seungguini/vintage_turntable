@@ -8,6 +8,9 @@ import * as THREE from "three";
 import { animated, useSpring, easings } from "@react-spring/three";
 import { useIsPlaying } from "../../states/states";
 
+const TURNTABLE_SCALE = 1.3
+const TURNTABLE_ROTATION = [0.5, 0.5, -0.25]
+const TURNTABLE_POSITION = [0, -0.24, 0]
 
 interface TurntableProps {
   setHovering: (a : boolean) => void,
@@ -77,11 +80,11 @@ export default function Turntable({
 
   return (
     <animated.group
-      scale={1.3}
+      scale={TURNTABLE_SCALE}
       // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
-      rotation={[0.5, 0.5, -0.25]}
+      rotation={TURNTABLE_ROTATION}
       // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
-      position={[0, -0.24, 0]}
+      position={TURNTABLE_POSITION}
       ref={group}
       // {...props}
       dispose={null}
