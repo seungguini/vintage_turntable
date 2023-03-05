@@ -10,7 +10,6 @@ interface CameraProps {
   setEnableLookAt: (to: boolean) => void
   camera: THREE.Camera
   mouse: THREE.Vector2
-  focused: boolean
 }
 
 export default function Camera({
@@ -19,26 +18,26 @@ export default function Camera({
   setEnableLookAt,
   camera,
   mouse,
-  focused,
 } : CameraProps) {
   const ref = useRef();
 
   const vec = new THREE.Vector3();
 
-  const cameraMovementScale = 2;
+  const cameraMovementScale = 1.1;
 
   useFrame(() => {
-    if (!focused) {
-      camera.position.lerp(
-        vec.set(
-          mouse.x * cameraMovementScale,
-          mouse.y * cameraMovementScale,
-          camera.position.z
-        ),
-        0.02
-      );
-    }
 
+    camera.position.lerp(
+      vec.set(
+        mouse.x * cameraMovementScale,
+        mouse.y * cameraMovementScale,
+        camera.position.z
+      ),
+      0.02
+    );
+
+    // During landing page animation sequence
+    // camera looks at the turntable.
     if (enableLookAt) {
       camera.lookAt(
         turntablePosition[0],

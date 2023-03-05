@@ -12,16 +12,12 @@ import { useIsPlaying } from "../../states/states";
 interface TurntableProps {
   setHovering: (a : boolean) => void,
   hovering: boolean,
-  focused: boolean,
-  setFocused: (a : boolean) => void,
   setToneArmFinished: (a : boolean) => void
 }
 
 export default function Turntable({
   setHovering,
   hovering,
-  focused,
-  setFocused,
   setToneArmFinished,
 } : TurntableProps)   {
   const group : any = useRef();
@@ -79,51 +75,19 @@ export default function Turntable({
     setHovering(false);
   };
 
-  const turntableClick = () => {
-    setFocused(true);
-  };
-
-  const turntableMiss = () => {
-    setFocused(false);
-  };
-
-
-  const zoomConfig = {
-    duration: 500,
-    easing: easings.easeInOutSine,
-  };
-
-  // Once clicked, zoom-in mode for turntable
-  const { scale } = useSpring({
-    scale: hovering && !focused ? 1.35 : 1.3,
-    // scale: 10,
-  });
-
-  const { rotation } = useSpring({
-    rotation: !focused ? [0.5, 0.5, -0.25] : [Math.PI * 0.5, 0, 0],
-    config: zoomConfig,
-  });
-
-  const { position } = useSpring({
-    position: !focused ? [0, -0.24, 0] : [0, 0, 6],
-    config: zoomConfig,
-  });
-
-
   return (
     <animated.group
-      scale={scale}
+      scale={1.3}
       // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
-      rotation={rotation}
+      rotation={[0.5, 0.5, -0.25]}
       // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
-      position={position}
+      position={[0, -0.24, 0]}
       ref={group}
       // {...props}
       dispose={null}
       onPointerEnter={turntableHoverEnter}
       onPointerLeave={turntableHoverLeave}
-      onPointerDown={turntableClick}
-      onPointerMissed={turntableMiss}
+     
     >
       <group name="Scene">
         <group name="Plinth" position={[-0.62, 0, -0.86]}>

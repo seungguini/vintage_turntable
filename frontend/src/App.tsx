@@ -21,7 +21,6 @@ import type { AudioType } from "./utils/constants";
 const Scene = () => {
   // States
   const [hovering, setHovering] = useState(false);
-  const [focused, setFocused] = useState(false); // If Turntable is clicked
   const [toneArmFinished, setToneArmFinished] = useState(false);
 
   // Playback states and actions
@@ -70,7 +69,6 @@ const Scene = () => {
         mouse={mouse}
         enableLookAt={enableLookAt}
         setEnableLookAt={setEnableLookAt}
-        focused={focused}
       />
       <Lights />
       <Sparkles count={2000} scale={25} size={2} />
@@ -83,8 +81,6 @@ const Scene = () => {
         <Turntable
           hovering={hovering}
           setHovering={setHovering}
-          focused={focused}
-          setFocused={setFocused}
           setToneArmFinished={setToneArmFinished}
         />
       </Float>
