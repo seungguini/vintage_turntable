@@ -12,7 +12,7 @@ import Turntable from "./components/mainView/Turntable";
 import Camera from "./components/environment/Camera";
 import Lights from "./components/environment/Lights";
 import Buttons from "./components/buttons/Buttons";
-import { useVolume, useIsPlaying } from "./states/states";
+import { useVolume, useIsPlaying } from "./states/playbackStore";
 
 import { TONE_ARM_SOUND_EFFECT, VINYL_SOUND_EFFECT } from "./utils/constants";
 import type { AudioType } from "./utils/constants";
@@ -20,17 +20,14 @@ import type { AudioType } from "./utils/constants";
 // The base ThreeJS component which renders the scene
 const Scene = () => {
   // States
-  const [hovering, setHovering] = useState(false);
   const [toneArmFinished, setToneArmFinished] = useState(false);
 
   // Playback states and actions
   const isPlaying: boolean = useIsPlaying();
   const volume: number = useVolume();
 
-
   const song: AudioType = new Audio("/songs/Daylight.mp3");
   song.volume = 0.01;
-
 
   //  Pause song
   useEffect(() => {
@@ -79,8 +76,6 @@ const Scene = () => {
         floatingRange={[-0.2, 0.2]} // Range of y-axis values the object will float within, defaults to [-0.1,0.1]
       >
         <Turntable
-          hovering={hovering}
-          setHovering={setHovering}
           setToneArmFinished={setToneArmFinished}
         />
       </Float>

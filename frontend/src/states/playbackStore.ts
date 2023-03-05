@@ -1,6 +1,6 @@
 import create from "zustand";
 
-interface PlayBackStoreType {
+interface PlaybackStoreType {
   isPlaying: boolean;
   volume: number;
   actions: PlaybackActions
@@ -15,7 +15,7 @@ interface PlaybackActions {
   isMute: () => boolean;
 }
 
-const usePlaybackStore = create<PlayBackStoreType>((set, get) => ({
+const usePlaybackStore = create<PlaybackStoreType>((set, get) => ({
   isPlaying: false,
   volume: 1,
   actions: {
