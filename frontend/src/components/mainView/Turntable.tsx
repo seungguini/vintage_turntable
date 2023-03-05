@@ -6,7 +6,7 @@ import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 import { animated, useSpring, easings } from "@react-spring/three";
-import { useIsPlaying } from "../../states";
+import { useIsPlaying } from "../../states/states";
 
 
 interface TurntableProps {

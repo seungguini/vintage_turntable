@@ -7,23 +7,15 @@ import {
   Float,
   Sparkles,
 } from "@react-three/drei";
-import { useSpring, easings, useSpringRef } from "@react-spring/three";
 
 import Turntable from "./components/mainView/Turntable";
 import Camera from "./components/environment/Camera";
 import Lights from "./components/environment/Lights";
 import Buttons from "./components/buttons/Buttons";
-import { useVolume, useIsPlaying, usePlaybackActions } from "./states";
+import { useVolume, useIsPlaying } from "./states/states";
 
-type SongType = HTMLAudioElement
-
-const song: SongType = new Audio("/songs/Daylight.mp3");
-song.volume = 0.01;
-const toneArmOnSoundeffect: SongType = new Audio("/soundeffects/tonearm_on_sound.mp3");
-toneArmOnSoundeffect.volume = 0.4;
-const vinylSoundeffect: SongType = new Audio("/soundeffects/vinyl_soundeffect.mp3");
-vinylSoundeffect.volume = 1;
-vinylSoundeffect.loop = true;
+import { TONE_ARM_SOUND_EFFECT, VINYL_SOUND_EFFECT } from "./utils/constants";
+import type { AudioType } from "./utils/constants";
 
 // The base ThreeJS component which renders the scene
 const Scene = () => {
@@ -36,12 +28,17 @@ const Scene = () => {
   const isPlaying: boolean = useIsPlaying();
   const volume: number = useVolume();
 
+
+  const song: AudioType = new Audio("/songs/Daylight.mp3");
+  song.volume = 0.01;
+
+
   //  Pause song
   useEffect(() => {
     if (!isPlaying) {
       song.pause();
-      toneArmOnSoundeffect.play();
-      vinylSoundeffect.pause();
+      TONE_ARM_SOUND_EFFECT.play();
+      VINYL_SOUND_EFFECT.pause();
     }
   }, [isPlaying]);
 
@@ -49,14 +46,14 @@ const Scene = () => {
   useEffect(() => {
     if (isPlaying && toneArmFinished) {
       console.log("Play button hit + tone arm moved");
-      toneArmOnSoundeffect.play();
-      vinylSoundeffect.play();
+      TONE_ARM_SOUND_EFFECT.play();
+      VINYL_SOUND_EFFECT.play();
       song.play();
     }
   }, [toneArmFinished]);
 
   useEffect(() => {
-    toneArmOnSoundeffect.volume = volume;
+    TONE_ARM_SOUND_EFFECT.volume = volume;
     song.volume = volume;
   }, [volume]);
 
@@ -91,7 +88,6 @@ const Scene = () => {
           setToneArmFinished={setToneArmFinished}
         />
       </Float>
-      {/* <Words opacity={opacity} /> */}
       <Buttons />
 
       <ContactShadows
