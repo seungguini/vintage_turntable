@@ -15,11 +15,13 @@ import Lights from "./components/environment/Lights";
 import Buttons from "./components/buttons/Buttons";
 import { useVolume, useIsPlaying, usePlaybackActions } from "./states";
 
-const song = new Audio("/songs/Daylight.mp3");
+type SongType = HTMLAudioElement
+
+const song: SongType = new Audio("/songs/Daylight.mp3");
 song.volume = 0.01;
-const toneArmOnSoundeffect = new Audio("/soundeffects/tonearm_on_sound.mp3");
+const toneArmOnSoundeffect: SongType = new Audio("/soundeffects/tonearm_on_sound.mp3");
 toneArmOnSoundeffect.volume = 0.4;
-const vinylSoundeffect = new Audio("/soundeffects/vinyl_soundeffect.mp3");
+const vinylSoundeffect: SongType = new Audio("/soundeffects/vinyl_soundeffect.mp3");
 vinylSoundeffect.volume = 1;
 vinylSoundeffect.loop = true;
 
@@ -31,8 +33,8 @@ const Scene = () => {
   const [toneArmFinished, setToneArmFinished] = useState(false);
 
   // Playback states and actions
-  const isPlaying = useIsPlaying();
-  const volume = useVolume();
+  const isPlaying: boolean = useIsPlaying();
+  const volume: number = useVolume();
 
   //  Pause song
   useEffect(() => {
@@ -45,7 +47,7 @@ const Scene = () => {
 
   // Song plays only when the tone arm moves onto the record
   useEffect(() => {
-    if (isPlaying & toneArmFinished) {
+    if (isPlaying && toneArmFinished) {
       console.log("Play button hit + tone arm moved");
       toneArmOnSoundeffect.play();
       vinylSoundeffect.play();
@@ -87,7 +89,7 @@ const Scene = () => {
 
   // Once clicked, zoom-in mode for turntable
   const ttScaleSpring = useSpring({
-    scale: hovering & !focused ? 1.35 : 1.3,
+    scale: hovering && !focused ? 1.35 : 1.3,
     // scale: 10,
   });
 
@@ -109,12 +111,12 @@ const Scene = () => {
   return (
     <>
       <Camera
-        makeDefault
         turntablePosition={[0, -0.24, 0]}
         camera={camera}
         mouse={mouse}
         enableLookAt={enableLookAt}
         setEnableLookAt={setEnableLookAt}
+        // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
         position={position}
         focused={focused}
       />
@@ -131,8 +133,11 @@ const Scene = () => {
           setHovering={setHovering}
           focused={focused}
           setFocused={setFocused}
+          // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
           scale={ttScaleSpring.scale}
+          // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
           rotation={ttRotationSpring.rotation}
+          // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)          
           position={ttPositionSpring.position}
           setToneArmFinished={setToneArmFinished}
         />
