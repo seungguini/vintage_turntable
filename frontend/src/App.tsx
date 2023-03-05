@@ -49,7 +49,7 @@ const Scene = () => {
 
   useEffect(() => {
     TONE_ARM_SOUND_EFFECT.volume = volume;
-    song.volume = volume;
+    song.volume = 0.03;
   }, [volume]);
 
   // ANIMATIONS
