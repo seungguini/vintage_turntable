@@ -63,51 +63,8 @@ const Scene = () => {
   // ANIMATIONS
   const [enableLookAt, setEnableLookAt] = useState(true);
 
-  const cameraMoveRef = useSpringRef();
-
   const { camera, mouse } = useThree();
-
-  const { position } = useSpring({
-    // react-spring
-    from: {
-      position: [15, 6, 10],
-    },
-    to: {
-      position: [0, 0, 8],
-    },
-    config: {
-      duration: 5000,
-      easing: easings.easeInOutSine,
-    },
-    onResolve: () => {
-      setEnableLookAt(false); // Disable lookat so camera can follow mouse
-    },
-    ref: cameraMoveRef,
-  });
-
-  // Turntable animations
-
-  // Once clicked, zoom-in mode for turntable
-  const ttScaleSpring = useSpring({
-    scale: hovering && !focused ? 1.35 : 1.3,
-    // scale: 10,
-  });
-
-  const zoomConfig = {
-    duration: 500,
-    easing: easings.easeInOutSine,
-  };
-
-  const ttRotationSpring = useSpring({
-    rotation: !focused ? [0.5, 0.5, -0.25] : [Math.PI * 0.5, 0, 0],
-    config: zoomConfig,
-  });
-
-  const ttPositionSpring = useSpring({
-    position: !focused ? [0, -0.24, 0] : [0, 0, 6],
-    config: zoomConfig,
-  });
-
+  
   return (
     <>
       <Camera
@@ -116,8 +73,6 @@ const Scene = () => {
         mouse={mouse}
         enableLookAt={enableLookAt}
         setEnableLookAt={setEnableLookAt}
-        // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
-        position={position}
         focused={focused}
       />
       <Lights />
@@ -133,12 +88,6 @@ const Scene = () => {
           setHovering={setHovering}
           focused={focused}
           setFocused={setFocused}
-          // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
-          scale={ttScaleSpring.scale}
-          // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)
-          rotation={ttRotationSpring.rotation}
-          // @ts-ignore: Spring type is Vector3 Type (Typescript return error on position)          
-          position={ttPositionSpring.position}
           setToneArmFinished={setToneArmFinished}
         />
       </Float>
