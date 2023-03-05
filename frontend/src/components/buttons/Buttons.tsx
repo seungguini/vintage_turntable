@@ -2,7 +2,7 @@ import React from "react";
 import { useGLTF } from "@react-three/drei";
 
 import Button from "./Button";
-import { useIsPlaying, usePlaybackActions } from "../../states";
+import { useIsPlaying, usePlaybackActions } from "../../states/states";
 
 useGLTF.preload("/prev_button.glb");
 

@@ -1,9 +1,11 @@
 import create from "zustand";
+import { AudioType } from "../utils/constants";
 
 interface PlayBackStoreType {
+  song: AudioType; // The song loaded onto the Turntable
   isPlaying: boolean;
   volume: number;
-  actions: PlaybackActions
+  actions: PlaybackActions;
 };
 
 interface PlaybackActions {
@@ -11,11 +13,12 @@ interface PlaybackActions {
   pause: () => void;
   mute: () => void;
   unmute: () => void;
-  setVolume: (to: number) => void;
+  setVolume: (to: number) => void; 
   isMute: () => boolean;
 }
 
 const usePlaybackStore = create<PlayBackStoreType>((set, get) => ({
+  song: new Audio("/songs/Daylight.mp3"),
   isPlaying: false,
   volume: 1,
   actions: {
@@ -36,6 +39,7 @@ const usePlaybackStore = create<PlayBackStoreType>((set, get) => ({
 // Custom hooks
 // helps prevent user from subscribing to the entire store
 // reference : https://tkdodo.eu/blog/working-with-zustand#only-export-custom-hooks
+export const useSong = () : AudioType => usePlaybackStore((state) => state.song);
 export const useIsPlaying = (): boolean => usePlaybackStore((state) => state.isPlaying);
 export const useVolume = (): number => usePlaybackStore((state) => state.volume);
 export const usePlaybackActions = (): PlaybackActions =>
