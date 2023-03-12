@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { AudioType } from "../utils/constants";
 import SONG_DATA from "../utils/songData";
 
-interface SongData {
+interface LocalSongData {
   name: string,
   cover: string,
   artist: string,
@@ -13,7 +13,7 @@ interface SongData {
 
 interface PlaybackStoreType {
   audio: AudioType; // The song loaded onto the Turntable
-  songs: SongData[]
+  songs: LocalSongData[],
   songIdx: number
   isPlaying: boolean;
   volume: number;
@@ -23,29 +23,27 @@ interface PlaybackStoreType {
 interface PlaybackActions {
   play: () => void;
   pause: () => void;
+  nextSong: () => void;
+  prevSong: () => void
   mute: () => void;
   unmute: () => void;
   setVolume: (to: number) => void; 
   isMute: () => boolean;
 }
 
-const setNextSongIdx = (set, get) => {
-  const currIdx = get().songIdx
-  const numSongs = get().songs.length
-  if (currIdx == numSongs - 1) {
-    set({songIdx: 0})
+const getNextSongIdx = (songIdx: number, numSongs: number): { songIdx: number } => {
+  if (songIdx == numSongs - 1) {
+    return { songIdx: 0 }
   } else {
-    set({songIdx: currIdx + 1})
+    return { songIdx: songIdx + 1}
   }
 }
 
-const setPrevSongIdx = (set, get) => {
-  const currIdx = get().songIdx
-  const numSongs = get().songs.length
-  if (currIdx == 0) {
-    set({songIdx: numSongs - 1})
+const getPrevSongIdx = (songIdx: number, numSongs: number): { songIdx: number } => {
+  if (songIdx == 0) {
+    return { songIdx: numSongs - 1 }
   } else {
-    set({songIdx: currIdx - 1})
+    return { songIdx: songIdx - 1}
   }
 }
 
@@ -59,8 +57,16 @@ const usePlaybackStore = create<PlaybackStoreType>((set, get) => ({
     // Separating actions from state : https://tkdodo.eu/blog/working-with-zustand#separate-actions-from-state
     play: () => set({ isPlaying: true }),
     pause: () => set({ isPlaying: false }),
-    nextSong: () => setNextSongIdx(set, get), 
-    prevSong: () => setPrevSongIdx(set, get), 
+    nextSong: () => {
+      const songIdx: number = get().songIdx
+      const numSongs: number = get().songs.length
+      set(getNextSongIdx(songIdx, numSongs))
+    },
+    prevSong: () => {
+      const songIdx: number = get().songIdx
+      const numSongs: number = get().songs.length
+      set(getPrevSongIdx(songIdx, numSongs))
+    },
     mute: () => {
       set({ volume: 0})}, 
     unmute: () => {
