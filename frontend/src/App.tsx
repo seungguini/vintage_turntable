@@ -1,6 +1,6 @@
 import "./App.css";
-import React, { useState } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
+import React from "react";
+import { Canvas } from "@react-three/fiber";
 import {
   ContactShadows,
   Environment,
@@ -19,19 +19,10 @@ const Scene = () => {
 
   useInitializePlayback()
 
-  // ANIMATIONS
-  const [enableLookAt, setEnableLookAt] = useState(true);
-
-  const { camera, mouse } = useThree();
-  
   return (
     <>
       <Camera
         turntablePosition={[0, -0.24, 0]}
-        camera={camera}
-        mouse={mouse}
-        enableLookAt={enableLookAt}
-        setEnableLookAt={setEnableLookAt}
       />
       <Lights />
       <Sparkles count={2000} scale={25} size={2} />
