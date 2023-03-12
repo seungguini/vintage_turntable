@@ -1,7 +1,7 @@
-import create from "zustand";
+import { create } from "zustand";
 import { AudioType } from "../utils/constants";
 
-interface PlayBackStoreType {
+interface PlaybackStoreType {
   song: AudioType; // The song loaded onto the Turntable
   isPlaying: boolean;
   volume: number;
@@ -17,7 +17,8 @@ interface PlaybackActions {
   isMute: () => boolean;
 }
 
-const usePlaybackStore = create<PlayBackStoreType>((set, get) => ({
+
+const usePlaybackStore = create<PlaybackStoreType>((set, get) => ({
   song: new Audio("/songs/Daylight.mp3"),
   isPlaying: false,
   volume: 1,
