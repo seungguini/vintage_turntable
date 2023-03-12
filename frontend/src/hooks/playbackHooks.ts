@@ -1,45 +1,45 @@
 import { useEffect } from 'react'
-import { useIsPlaying, useVolume, useSong } from '../states/playbackStore';
+import { useIsPlaying, useVolume, useAudio } from '../states/playbackStore';
 import { useToneArmFinished } from '../states/animationStore';
 import { AudioType, TONE_ARM_SOUND_EFFECT, VINYL_SOUND_EFFECT } from '../utils/constants';
 // Custom hook which encapsulates playback logic
 const usePlayback = (): void => {
 
     const isPlaying: boolean = useIsPlaying()
-    const song: AudioType = useSong()
+    const audio: AudioType = useAudio()
     const toneArmFinished: boolean = useToneArmFinished()
 
-  //  Pause song
+  //  Pause audio
   useEffect(() => {
     if (!isPlaying) {
-      song.pause();
+      audio.pause();
       TONE_ARM_SOUND_EFFECT.play();
       VINYL_SOUND_EFFECT.pause();
     }
   }, [isPlaying]);
 
-  // Song plays only when the tone arm moves onto the record
+  // audio plays only when the tone arm moves onto the record
   useEffect(() => {
     if (isPlaying && toneArmFinished) {
       console.log("Play button hit + tone arm moved");
       TONE_ARM_SOUND_EFFECT.play();
       VINYL_SOUND_EFFECT.play();
-      song.play();
+      audio.play();
     }
   }, [toneArmFinished]);
 
 }
 
 const useVolumeControls = (): void => {
-  const song: AudioType = useSong()
+  const audio: AudioType = useAudio()
   const volume: number = useVolume()
 
-  // Initialize song volume
-  song.volume = 0.1;
+  // Initialize audio volume
+  audio.volume = 0.1;
 
   useEffect(() => {
     TONE_ARM_SOUND_EFFECT.volume = volume;
-    song.volume = volume;
+    audio.volume = volume;
   }, [volume]);
 }
 

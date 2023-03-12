@@ -1,6 +1,6 @@
 import "./App.css";
-import React, { useState } from "react";
-import { Canvas, useThree } from "@react-three/fiber";
+import React from "react";
+import { Canvas } from "@react-three/fiber";
 import {
   ContactShadows,
   Environment,
@@ -19,19 +19,10 @@ const Scene = () => {
 
   useInitializePlayback()
 
-  // ANIMATIONS
-  const [enableLookAt, setEnableLookAt] = useState(true);
-
-  const { camera, mouse } = useThree();
-  
   return (
     <>
       <Camera
         turntablePosition={[0, -0.24, 0]}
-        camera={camera}
-        mouse={mouse}
-        enableLookAt={enableLookAt}
-        setEnableLookAt={setEnableLookAt}
       />
       <Lights />
       <Sparkles count={2000} scale={25} size={2} />
@@ -41,9 +32,9 @@ const Scene = () => {
         floatIntensity={1.5} // Up/down float intensity, works like a multiplier with floatingRange,defaults to 1
         floatingRange={[-0.2, 0.2]} // Range of y-axis values the object will float within, defaults to [-0.1,0.1]
       >
+        <Turntable />
       </Float>
       <Buttons />
-      <Turntable />
 
       <ContactShadows
         position={[0, -1.4, 0]}
