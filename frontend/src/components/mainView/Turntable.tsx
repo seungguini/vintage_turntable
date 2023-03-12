@@ -7,24 +7,21 @@ import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 import { animated } from "@react-spring/three";
 import { useIsPlaying } from "../../states/playbackStore";
+import { useAnimationActions } from "../../states/animationStore"
 const TURNTABLE_SCALE = 1.3
 const TURNTABLE_ROTATION = [0.5, 0.5, -0.25]
 const TURNTABLE_POSITION = [0, -0.24, 0]
 
-interface TurntableProps {
-  setToneArmFinished: (to : boolean) => void
-}
 
+export default function Turntable() {
 
-export default function Turntable({
-  setToneArmFinished,
-} : TurntableProps)   {
+  const { setToneArmFinished } = useAnimationActions()
+
   const group : any = useRef();
   const modelLocation = "/models/turntable.glb";
   const turntable : any = useGLTF(modelLocation);
   const { nodes, materials, animations } = turntable;
   const { actions } = useAnimations(animations, group);
-
   const [hovering, setHovering] = useState(false);
   // States + actions from the playbackStore
   const isPlaying = useIsPlaying();
@@ -56,6 +53,8 @@ export default function Turntable({
       toneArmAction.clampWhenFinished = true;
     }
 
+    // Let the App know that the tone arm finished (the needle is set on the record),
+    // so the audio can start playing
     toneArmAction._mixer.addEventListener("finished", () => {
       setToneArmFinished(true);
     });

@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import {
   ContactShadows,
@@ -12,45 +12,12 @@ import Turntable from "./components/mainView/Turntable";
 import Camera from "./components/environment/Camera";
 import Lights from "./components/environment/Lights";
 import Buttons from "./components/buttons/Buttons";
-import { useVolume, useIsPlaying, useSong } from "./states/playbackStore";
-
-import { TONE_ARM_SOUND_EFFECT, VINYL_SOUND_EFFECT } from "./utils/constants";
-import type { AudioType } from "./utils/constants";
+import { useInitializePlayback } from "./hooks/playbackHooks";
 
 // The base ThreeJS component which renders the scene
 const Scene = () => {
-  // States
-  const [toneArmFinished, setToneArmFinished] = useState(false);
 
-  // Playback states and actions
-  const isPlaying: boolean = useIsPlaying();
-  const volume: number = useVolume();
-  const song: AudioType = useSong();
-  song.volume = 0.01;
-
-  //  Pause song
-  useEffect(() => {
-    if (!isPlaying) {
-      song.pause();
-      TONE_ARM_SOUND_EFFECT.play();
-      VINYL_SOUND_EFFECT.pause();
-    }
-  }, [isPlaying]);
-
-  // Song plays only when the tone arm moves onto the record
-  useEffect(() => {
-    if (isPlaying && toneArmFinished) {
-      console.log("Play button hit + tone arm moved");
-      TONE_ARM_SOUND_EFFECT.play();
-      VINYL_SOUND_EFFECT.play();
-      song.play();
-    }
-  }, [toneArmFinished]);
-
-  useEffect(() => {
-    TONE_ARM_SOUND_EFFECT.volume = volume;
-    song.volume = 0.03;
-  }, [volume]);
+  useInitializePlayback()
 
   // ANIMATIONS
   const [enableLookAt, setEnableLookAt] = useState(true);
@@ -74,11 +41,9 @@ const Scene = () => {
         floatIntensity={1.5} // Up/down float intensity, works like a multiplier with floatingRange,defaults to 1
         floatingRange={[-0.2, 0.2]} // Range of y-axis values the object will float within, defaults to [-0.1,0.1]
       >
-        <Turntable
-          setToneArmFinished={setToneArmFinished}
-        />
       </Float>
       <Buttons />
+      <Turntable />
 
       <ContactShadows
         position={[0, -1.4, 0]}

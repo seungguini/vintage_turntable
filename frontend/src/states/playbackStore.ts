@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import { AudioType } from "../utils/constants";
 
 interface PlaybackStoreType {
