@@ -12,7 +12,7 @@ import Turntable from "./components/mainView/Turntable";
 import Camera from "./components/environment/Camera";
 import Lights from "./components/environment/Lights";
 import Buttons from "./components/buttons/Buttons";
-import { useVolume, useIsPlaying } from "./states/playbackStore";
+import { useVolume, useIsPlaying, useSong } from "./states/playbackStore";
 
 import { TONE_ARM_SOUND_EFFECT, VINYL_SOUND_EFFECT } from "./utils/constants";
 import type { AudioType } from "./utils/constants";
@@ -25,8 +25,7 @@ const Scene = () => {
   // Playback states and actions
   const isPlaying: boolean = useIsPlaying();
   const volume: number = useVolume();
-
-  const song: AudioType = new Audio("/songs/Daylight.mp3");
+  const song: AudioType = useSong();
   song.volume = 0.01;
 
   //  Pause song
@@ -50,7 +49,7 @@ const Scene = () => {
 
   useEffect(() => {
     TONE_ARM_SOUND_EFFECT.volume = volume;
-    song.volume = volume;
+    song.volume = 0.03;
   }, [volume]);
 
   // ANIMATIONS
