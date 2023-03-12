@@ -1,13 +1,13 @@
 import { useEffect } from 'react'
 import { useIsPlaying, useVolume, useSong } from '../states/playbackStore';
 import { useToneArmFinished } from '../states/animationStore';
-import { TONE_ARM_SOUND_EFFECT, VINYL_SOUND_EFFECT } from '../utils/constants';
+import { AudioType, TONE_ARM_SOUND_EFFECT, VINYL_SOUND_EFFECT } from '../utils/constants';
 // Custom hook which encapsulates playback logic
 const usePlayback = (): void => {
 
-    const isPlaying = useIsPlaying()
-    const song = useSong()
-    const toneArmFinished = useToneArmFinished()
+    const isPlaying: boolean = useIsPlaying()
+    const song: AudioType = useSong()
+    const toneArmFinished: boolean = useToneArmFinished()
 
   //  Pause song
   useEffect(() => {
@@ -31,8 +31,8 @@ const usePlayback = (): void => {
 }
 
 const useVolumeControls = (): void => {
-  const song = useSong()
-  const volume = useVolume()
+  const song: AudioType = useSong()
+  const volume: number = useVolume()
 
   // Initialize song volume
   song.volume = 0.1;
