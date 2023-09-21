@@ -27,6 +27,28 @@ SPOTIFY_CLIENT_ID="your_client_id"
 3. In browser, type in `localhost:8000/api/spotify/token` to get access token.
 - The session is set to one hour, so the data will persist for one hour.
 
+## Environment Variables
+
+There are a list of environment variables to consider.
+
+These are used to set the appriopriate backend and frontend urls which are very important for spotify authentication.
+
+`NODE_ENV`: Controls the environment of the service. Has three potential values: "dev" | "staging" | "prod"
+
+Frontend env urls keys
+```.env
+FRONTEND_PROD_URL: string
+FRONTEND_STAGING_URL: string
+FRONTEND_DEV_URL: string || "http://localhost:3000"
+```
+
+Backend env urls keys
+```.env
+BACKEND_PROD_URL: string
+BACKEND_STAGING_URL: string
+BACKEND_DEV_URL: string || "http://localhost:8000"
+```
+
 ## Tests
 
 Unit tests uses dependencies 
