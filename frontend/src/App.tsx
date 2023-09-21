@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import {
   ContactShadows,
@@ -13,11 +13,46 @@ import Camera from "./components/environment/Camera";
 import Lights from "./components/environment/Lights";
 import Buttons from "./components/buttons/Buttons";
 import { useInitializePlayback } from "./hooks/playbackHooks";
+import { 
+  BACKEND_DEV_URL,
+  SS_ACCESS_TOKEN_KEY, 
+  SS_REFRESH_TOKEN_KEY } 
+from "./utils/constants";
 
 // The base ThreeJS component which renders the scene
 const Scene = () => {
 
   useInitializePlayback()
+
+  // Listen for redirect callbacks to retrieve token
+  useEffect(() => {
+    const frontEndUrl = new URL(window.location.href);
+    
+    const tokenParam = frontEndUrl.searchParams.get("retrieve_token");
+    if(tokenParam === "true") {
+      // Fetch to get token here.
+      const url = BACKEND_DEV_URL + "api/spotify/token";
+      fetch(url, {
+        method: "GET",
+        credentials: "include"
+      }).then((response) => {
+        return response.json();
+      }).then((data) => {
+        if(data.error) {
+          console.log("Error ", data.error);
+          return;
+        }
+        const accessToken = data.accessToken;
+        const refreshToken = data.refreshToken;
+
+        localStorage.setItem(SS_ACCESS_TOKEN_KEY, accessToken);
+        localStorage.setItem(SS_REFRESH_TOKEN_KEY, refreshToken);
+
+        window.location.href = "/";
+      })
+
+    }
+  }, []);
 
   return (
     <>
@@ -50,9 +85,11 @@ const Scene = () => {
 
 const App = () => {
   return (
-    <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 10], fov: 50 }}>
-      <Scene />
-    </Canvas>
+    <>
+      <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 10], fov: 50 }}>
+        <Scene />
+      </Canvas>
+    </>
   );
 };
 

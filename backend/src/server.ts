@@ -1,4 +1,5 @@
 import app from "./app"
+import { getBackendURL, getEnvironment, getFrontendURL } from "./utils";
 
 /**
  * This snippet of code could be in the end of app.ts but it will 
@@ -11,5 +12,11 @@ import app from "./app"
  */
 const port = process.env.PORT || 8000;
 app.listen(port, () => {
-  console.log(`Listening on port ${port}`)
+  const env = getEnvironment();
+  const frontendUrl = getFrontendURL();
+  const backendUrl = getBackendURL();
+  console.log(`Starting Server On: ${env}`);
+  console.log(`Using ${frontendUrl} as frontend url`);
+  console.log(`Using ${backendUrl} as backend url`);
+  console.log(`Listening on port ${port}`);
 })

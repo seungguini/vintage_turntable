@@ -3,11 +3,14 @@ import bodyParser from "body-parser";
 import morgan from "morgan";
 import session from "express-session"
 import * as dotenv from 'dotenv';
+import cors from 'cors';
+
 import "./typings" // Defines the types for session store data. Workaround with this bug: https://github.com/expressjs/session/issues/799
 
 dotenv.config(); // Should load .env file directly
 
 import spotifyRoutes from "./routes/spotify";
+import { getFrontendURL } from './utils';
 
 const app = express();
 
@@ -42,6 +45,18 @@ app.use(session({
     maxAge: 60 * 60 * 1000 //In milliseconds, so this is one hour
   }
 }));
+
+app.use(cors({
+  // 
+  origin: (_, callback) => {
+
+    const corsAllowUrl = getFrontendURL();
+    const allowedUrls : Array<string> = [corsAllowUrl];
+    callback(null, allowedUrls);
+  },
+  method: ['GET', 'PUT', 'POST'],
+  credentials: true
+}))
 
 app.use('/api/spotify', spotifyRoutes)
 

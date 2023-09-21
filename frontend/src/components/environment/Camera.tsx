@@ -71,7 +71,7 @@ export default function Camera({
   return (
     <>
       <AnimatedPerspectiveCamera
-        ref={ref}
+        // ref={ref}
         makeDefault
         fov={50}
         // See https://github.com/pmndrs/react-spring/issues/1302#issuecomment-1404664605

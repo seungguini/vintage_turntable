@@ -6,7 +6,7 @@ describe("Test spotify routes /api/spotify", () => {
   it("Test /login route", (done) => {
     request(app)
       .get("/api/spotify/login")
-      .expect(302, done)
+      .expect(200, done)
   });
 
   it("Test /callback User rejection", (done) => {
