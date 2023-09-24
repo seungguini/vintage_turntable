@@ -8,11 +8,11 @@ useGLTF.preload("/prev_button.glb");
 
 export default function Buttons() {
 
-  const isPlaying = useIsPlaying();
-  const { play, pause, mute, unmute, isMute } = usePlaybackActions();
+  const isPlaying: boolean = useIsPlaying();
+  const { play, pause, mute, unmute, isMute, nextSong, prevSong } = usePlaybackActions();
 
   // Handlers define the action of a button
-  const playClickHandler = () => {
+  const playClickHandler = (): void => {
     if (isPlaying) {
       pause()
       console.log("setting Zustand pause")
@@ -22,13 +22,22 @@ export default function Buttons() {
     }
   };
 
-  const soundClickHandler = () => {
+  const soundClickHandler = (): void => {
     if (isMute()) {
       unmute()
     } else {
       mute()
     }
   };
+
+  const nextClickHandler = (): void => {
+    nextSong()
+  }
+
+
+  const prevClickHandler = (): void => {
+    prevSong()
+  }
 
   return (
     <>
@@ -54,14 +63,14 @@ export default function Buttons() {
         modelPath={"/models/buttons/next_button.glb"}
         position={[1, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
-        actionHandler={() => {}}
+        actionHandler={nextClickHandler}
       />
       <Button
         id="prevButton"
         modelPath={"/models/buttons/prev_button.glb"}
         position={[-1, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
-        actionHandler={() => {}}
+        actionHandler={prevClickHandler}
       />
       <Button
         id="homeButton"

@@ -31,21 +31,39 @@ interface PlaybackActions {
   isMute: () => boolean;
 }
 
-const getNextSongIdx = (songIdx: number, numSongs: number): { songIdx: number } => {
-  if (songIdx == numSongs - 1) {
-    return { songIdx: 0 }
-  } else {
-    return { songIdx: songIdx + 1}
+type UpdateType = "next" | "prev"
+
+// Calculates the updated song index, depending on whether the user selected next or previous
+const updateSongIdx = (to: UpdateType, currIdx: number, numSongs: number): number => {
+  switch (to) {
+    case "next":
+      if (currIdx == numSongs - 1) {
+        return 0
+      } else {
+        return currIdx + 1
+      }
+    case "prev":
+      if (currIdx == 0) {
+        return numSongs - 1
+      } else {
+        return currIdx - 1
+      }
   }
 }
 
-const getPrevSongIdx = (songIdx: number, numSongs: number): { songIdx: number } => {
-  if (songIdx == 0) {
-    return { songIdx: numSongs - 1 }
-  } else {
-    return { songIdx: songIdx - 1}
-  }
+const initializeNewAudio = (songIdx: number, songs: LocalSongData[]): AudioType => {
+  const songData: LocalSongData = songs[songIdx]
+  return new Audio(process.env.PUBLIC_URL + "/songs/" + songData["name"] + ".mp3")
 }
+
+const updateSong = (newSongIdx: number, songs: LocalSongData[]): { audio: AudioType, songIdx: number } => {
+  const newAudio: AudioType = initializeNewAudio(newSongIdx, songs)
+  return { songIdx : newSongIdx, audio: newAudio }
+}
+
+// const nextSongAction = (set: (partial: PlaybackStoreType) => void, get: () => PlaybackStoreType) => {
+
+// }
 
 const usePlaybackStore = create<PlaybackStoreType>((set, get) => ({
   audio: new Audio("/songs/Daylight.mp3"),
@@ -58,14 +76,18 @@ const usePlaybackStore = create<PlaybackStoreType>((set, get) => ({
     play: () => set({ isPlaying: true }),
     pause: () => set({ isPlaying: false }),
     nextSong: () => {
-      const songIdx: number = get().songIdx
-      const numSongs: number = get().songs.length
-      set(getNextSongIdx(songIdx, numSongs))
+      get().audio.pause()
+      const currIdx: number = get().songIdx
+      const songs: LocalSongData[] = get().songs
+      const newSongIdx = updateSongIdx("next", currIdx, songs.length)
+      set(updateSong(newSongIdx, songs)) // Update the song itself too to keep song update logic encapsultaed
     },
     prevSong: () => {
-      const songIdx: number = get().songIdx
-      const numSongs: number = get().songs.length
-      set(getPrevSongIdx(songIdx, numSongs))
+      get().audio.pause()
+      const currIdx: number = get().songIdx
+      const songs: LocalSongData[] = get().songs
+      const newSongIdx = updateSongIdx("prev", currIdx, songs.length)
+      set(updateSong(newSongIdx, songs))
     },
     mute: () => {
       set({ volume: 0})}, 
@@ -84,5 +106,6 @@ const usePlaybackStore = create<PlaybackStoreType>((set, get) => ({
 export const useAudio = () : AudioType => usePlaybackStore((state) => state.audio);
 export const useIsPlaying = (): boolean => usePlaybackStore((state) => state.isPlaying);
 export const useVolume = (): number => usePlaybackStore((state) => state.volume);
+export const useSongIdx = (): number => usePlaybackStore((state) => state.songIdx)
 export const usePlaybackActions = (): PlaybackActions =>
   usePlaybackStore((state) => state.actions);
