@@ -260,7 +260,6 @@ router.get('/token', (req, res) => {
  *  refresh_token: "this_is_a_random_refresh_token_here"
  * }
  */
-router.options('/refresh_token', cors()); // Need this for cors
 router.post('/refresh_token', async (req, res) => {
   // requesting access token from refresh token
 

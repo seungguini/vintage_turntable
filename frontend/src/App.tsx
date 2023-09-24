@@ -18,6 +18,7 @@ import {
   SS_ACCESS_TOKEN_KEY, 
   SS_REFRESH_TOKEN_KEY } 
 from "./utils/constants";
+import SpotifyPlayer from "./SpotifyPlayer";
 
 // The base ThreeJS component which renders the scene
 const Scene = () => {
@@ -86,9 +87,12 @@ const Scene = () => {
 const App = () => {
   return (
     <>
-      <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 10], fov: 50 }}>
-        <Scene />
-      </Canvas>
+      <React.StrictMode>
+        <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 10], fov: 50 }}>
+          <Scene />
+        </Canvas>
+      </React.StrictMode>
+      <SpotifyPlayer></SpotifyPlayer>
     </>
   );
 };
