@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react"
 import { 
   SS_ACCESS_TOKEN_KEY, 
-  SS_REFRESH_TOKEN_KEY, 
+  SS_REFRESH_TOKEN_KEY,
+  SS_DEVICE_ID_KEY,
   BACKEND_DEV_URL } from "./utils/constants";
 
-import { useSpotifyActions } from "./states/spotifyPlayerStore";
+import { useSpotifyActions, useSpotifyPlayer } from "./states/spotifyPlayerStore";
+import { getAvailableDevices } from "./utils/spotifyClient";
+import { usePlaybackActions } from "./states/playbackStore";
 
 export default function SpotifyPlayer() {
 
-  const { setPlayer } = useSpotifyActions();
+  const { setPlayer, setIsCurrentDeviceActive } = useSpotifyActions();
+  const player : Spotify.Player | null = useSpotifyPlayer();
+  const { play, pause } = usePlaybackActions();
 
   const refreshToken = () => {
     const url = `${BACKEND_DEV_URL}api/spotify/refresh_token`;
@@ -67,6 +72,31 @@ export default function SpotifyPlayer() {
     });
   }
 
+  const getDevices = () => {
+
+    const accessToken = localStorage.getItem(SS_ACCESS_TOKEN_KEY);
+
+    if(!accessToken) {
+      console.log("Spotify Access Token Empty");
+      return;
+    }
+    getAvailableDevices(accessToken)
+    .then((data: SpotifyApi.UserDevicesResponse | null) => {
+      if(!data) {
+        return;
+      }
+
+      if(data.devices.length === 0) {
+        // No devices playing.
+        return;
+      }
+
+      data.devices.forEach((device : SpotifyApi.UserDevice) => {
+        console.log(device);
+      });
+    })
+  }
+
   const invokeSpotifyPlayer = () => {
     const accessToken = localStorage.getItem(SS_ACCESS_TOKEN_KEY);
 
@@ -84,6 +114,7 @@ export default function SpotifyPlayer() {
         });
 
         player.addListener('ready', ({ device_id } : any) => {
+            sessionStorage.setItem(SS_DEVICE_ID_KEY, device_id);
             console.log('Ready with Device ID', device_id);
         });
 
@@ -91,16 +122,34 @@ export default function SpotifyPlayer() {
             console.log('Device ID has gone offline', device_id);
         });
 
+        player.addListener('player_state_changed', (
+          playbackPlayer: Spotify.PlaybackState
+        ) => {
+          if(!playbackPlayer) return;
+          if(playbackPlayer.loading) return;
+          if(playbackPlayer.paused && playbackPlayer.playback_id.length === 0) return;
+
+          if(playbackPlayer.paused) {
+            // Invoke pause animation
+            pause()
+            // setIsCurrentDeviceActive(false);
+            console.log("Play from remote pause");
+            // pauseAnimation();
+          } else {
+            // Invoke play animation
+            play()
+            console.log("Play from remote play");
+          }
+
+          console.log(playbackPlayer);
+        })
+
         player.on('authentication_error', ({ message }) => {
           console.log('Failed to authenticate: Attempting to reauthenticate');
           refreshToken()
         });
 
-        await player.connect().then((isConnected: boolean) => {
-          if(isConnected) {
-            player.activateElement();
-          }
-        });
+        await player.connect();
         // await player.pause();
         setPlayer(player);
     };
@@ -114,7 +163,8 @@ export default function SpotifyPlayer() {
 
   return(
     <div>
-      {/* <button onClick={refreshToken}>Refresh</button> */}
+      <button onClick={getDevices}>Get Devices</button>
+      <button onClick={refreshToken}>Refresh</button>
     </div>
   );
 }

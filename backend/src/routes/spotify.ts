@@ -17,7 +17,8 @@ const scope = `
   user-read-email
   streaming
   user-read-playback-state
-  user-modify-playback-state`;
+  user-modify-playback-state
+  app-remote-control`;
 
 const router = express.Router();
 
