@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { 
   SS_ACCESS_TOKEN_KEY, 
   SS_REFRESH_TOKEN_KEY,
@@ -6,14 +6,15 @@ import {
   BACKEND_DEV_URL } from "./utils/constants";
 
 import { useSpotifyActions, useSpotifyPlayer } from "./states/spotifyPlayerStore";
-import { getAvailableDevices } from "./utils/spotifyClient";
-import { usePlaybackActions } from "./states/playbackStore";
+import { usePlaybackActions, useIsPlaying } from "./states/playbackStore";
+import { transferPlayback  } from "./utils/spotifyClient";
 
 export default function SpotifyPlayer() {
 
-  const { setPlayer, setIsCurrentDeviceActive } = useSpotifyActions();
+  const { setPlayer } = useSpotifyActions();
   const player : Spotify.Player | null = useSpotifyPlayer();
   const { play, pause } = usePlaybackActions();
+  const isPlaying: boolean = useIsPlaying()
 
   const refreshToken = () => {
     const url = `${BACKEND_DEV_URL}api/spotify/refresh_token`;
@@ -38,8 +39,13 @@ export default function SpotifyPlayer() {
   
           localStorage.setItem(SS_ACCESS_TOKEN_KEY, accessToken);
           localStorage.setItem(SS_REFRESH_TOKEN_KEY, refreshToken);
-  
-          invokeSpotifyPlayer();
+
+          player?.disconnect();
+
+          // Reload the script
+          loadSpotifyPlayer().then((_) => {
+            invokeSpotifyPlayer();
+          });
         } else {
           console.error(data);
         }
@@ -72,31 +78,6 @@ export default function SpotifyPlayer() {
     });
   }
 
-  const getDevices = () => {
-
-    const accessToken = localStorage.getItem(SS_ACCESS_TOKEN_KEY);
-
-    if(!accessToken) {
-      console.log("Spotify Access Token Empty");
-      return;
-    }
-    getAvailableDevices(accessToken)
-    .then((data: SpotifyApi.UserDevicesResponse | null) => {
-      if(!data) {
-        return;
-      }
-
-      if(data.devices.length === 0) {
-        // No devices playing.
-        return;
-      }
-
-      data.devices.forEach((device : SpotifyApi.UserDevice) => {
-        console.log(device);
-      });
-    })
-  }
-
   const invokeSpotifyPlayer = () => {
     const accessToken = localStorage.getItem(SS_ACCESS_TOKEN_KEY);
 
@@ -115,7 +96,13 @@ export default function SpotifyPlayer() {
 
         player.addListener('ready', ({ device_id } : any) => {
             sessionStorage.setItem(SS_DEVICE_ID_KEY, device_id);
+
             console.log('Ready with Device ID', device_id);
+            if(isPlaying) {
+
+              const playOnTransfer = true;
+              transferPlayback(accessToken, device_id, playOnTransfer)
+            }
         });
 
         player.addListener('not_ready', ({ device_id } : any) => {
@@ -132,13 +119,9 @@ export default function SpotifyPlayer() {
           if(playbackPlayer.paused) {
             // Invoke pause animation
             pause()
-            // setIsCurrentDeviceActive(false);
-            console.log("Play from remote pause");
-            // pauseAnimation();
           } else {
             // Invoke play animation
             play()
-            console.log("Play from remote play");
           }
 
           console.log(playbackPlayer);
@@ -150,7 +133,6 @@ export default function SpotifyPlayer() {
         });
 
         await player.connect();
-        // await player.pause();
         setPlayer(player);
     };
   }
@@ -163,7 +145,7 @@ export default function SpotifyPlayer() {
 
   return(
     <div>
-      <button onClick={getDevices}>Get Devices</button>
+      {/* <button onClick={getDevices}>Get Devices</button> */}
       <button onClick={refreshToken}>Refresh</button>
     </div>
   );

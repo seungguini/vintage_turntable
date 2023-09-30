@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useIsPlaying, useVolume, useSong } from '../states/playbackStore';
 import { useToneArmFinished } from '../states/animationStore';
-import { useSpotifyActions, useSpotifyIsCurrentDeviceActive, useSpotifyPlayer } from '../states/spotifyPlayerStore';
+import { useSpotifyPlayer } from '../states/spotifyPlayerStore';
 import { AudioType, TONE_ARM_SOUND_EFFECT, VINYL_SOUND_EFFECT, SS_ACCESS_TOKEN_KEY, SS_DEVICE_ID_KEY } from '../utils/constants';
 import { transferPlayback } from '../utils/spotifyClient';
 // Custom hook which encapsulates playback logic
@@ -11,16 +11,8 @@ const usePlayback = (): void => {
     const song: AudioType = useSong()
     const toneArmFinished: boolean = useToneArmFinished()
     const spotifyPlayer : Spotify.Player | null = useSpotifyPlayer();
-    const spotifyIsCurrentDeviceActive : boolean = useSpotifyIsCurrentDeviceActive();
-    const spotifyPlayerActions = useSpotifyActions()
 
   const playSpotify = () => {
-
-    // if(spotifyIsCurrentDeviceActive) {
-    //   console.log("Toggle play")
-    //   spotifyPlayer?.togglePlay();
-    //   return;
-    // }
 
     const token : string | null = localStorage.getItem(SS_ACCESS_TOKEN_KEY);
     const deviceId : string | null = sessionStorage.getItem(SS_DEVICE_ID_KEY);
@@ -28,9 +20,7 @@ const usePlayback = (): void => {
 
     if(token && deviceId) {
       console.log("Transfer playback")
-      transferPlayback(token, deviceId, playOnTransfer).then((_) => {
-        spotifyPlayerActions.setIsCurrentDeviceActive(true);
-      });
+      transferPlayback(token, deviceId, playOnTransfer);
     }
   };
 
