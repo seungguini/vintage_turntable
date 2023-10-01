@@ -47,7 +47,8 @@ app.use(session({
 }));
 
 app.use(cors({
-  // 
+  // Allows requests from domains other than the ones hosted on this service instance.
+  // We can specify which domain to "access" the backend by environment variables.
   origin: (_, callback) => {
 
     const corsAllowUrl = getFrontendURL();
