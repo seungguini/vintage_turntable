@@ -85,11 +85,9 @@ const Scene = () => {
 
 const App = () => {
   return (
-    <>
-      <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 10], fov: 50 }}>
-        <Scene />
-      </Canvas>
-    </>
+    <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 10], fov: 50 }}>
+      <Scene />
+    </Canvas>
   );
 };
 
