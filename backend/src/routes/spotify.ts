@@ -2,12 +2,14 @@ import express from "express"
 import querystring from "querystring"
 import cors from "cors"
 
-import { generateRandomString } from "../utils";
+import { generateRandomString, getBackendURL, getFrontendURL } from "../utils";
 
 const clientSecret = process.env.SPOTIFY_CLIENT_SECRET || "";
 const clientId = process.env.SPOTIFY_CLIENT_ID || "";
-const redirectURI = "http://localhost:8000/api/spotify/callback";
-const frontendURI = "http://localhost:3000/"
+
+// Make sure it is registered on spotify
+// Right now only http://localhost:8000 is registered
+const redirectURI = `${getBackendURL()}/api/spotify/callback`;
 
 // Scopes: https://developer.spotify.com/documentation/general/guides/authorization/scopes/
 const scope = `
@@ -96,14 +98,16 @@ router.delete("/session", (req, res) => {
 router.get("/login", (req, res) => {
   const state = generateRandomString(16);
 
-  res.redirect('https://accounts.spotify.com/authorize?' +
-    querystring.stringify({
-      response_type: 'code',
-      client_id: clientId,
-      scope: scope,
-      redirect_uri: redirectURI,
-      state: state
-  }));
+  const redirectUrl = 'https://accounts.spotify.com/authorize?' +
+  querystring.stringify({
+    response_type: 'code',
+    client_id: clientId,
+    scope: scope,
+    redirect_uri: redirectURI,
+    state: state
+  })
+
+  res.send(redirectUrl);
 });
 
 /**
@@ -132,18 +136,14 @@ router.get('/callback', async (req, res)=> {
   const state : string = req.query.state && req.query.state.toString() || null;
   const error : string = req.query.error && req.query.error.toString() || null;
 
+  const frontendURL = getFrontendURL();
+
   // User rejects our authorization to use spotify
   if (error) {
-    return res.redirect('/statusCheck?' +
-      querystring.stringify({
-        error
+    res.redirect(`${frontendURL}?` +
+    querystring.stringify({
+      error
     }));
-
-    // Uncomment when integrating with frontend
-    // res.redirect(`${frontendURI}?` +
-    // querystring.stringify({
-    //   error
-    // }));
   }
 
   const spotifyTokenURL = "https://accounts.spotify.com/api/token";
@@ -170,15 +170,9 @@ router.get('/callback', async (req, res)=> {
 
     const textError = await accessTokenResponse.text()
     const jsonError = JSON.parse(textError)
-    res.redirect('/statusCheck?' +
-      querystring.stringify(jsonError)
-    );
 
-  // Uncomment when integrating with frontend
-  // res.redirect(`${frontendURI}?` + 
-  //   querystring.stringify({
-  //     error: textError
-  // }));
+    res.redirect(`${frontendURL}?` + 
+      querystring.stringify(jsonError));
   }
 
   const body = await accessTokenResponse.json();
@@ -197,15 +191,12 @@ router.get('/callback', async (req, res)=> {
       res.status(500);
       return res.send(`Cannot save token to session: ${err.toString()}`);
     }
-    
-    // Uncomment this when we integrate with the frontend
-    // res.redirect(`${frontendURI}?` +
-    //   querystring.stringify({
-    //     retrieve_token: true
-    //   } 
-    // ));
 
-    res.redirect(`/statusCheck`);
+    res.redirect(`${frontendURL}?` +
+      querystring.stringify({
+        retrieve_token: true
+      } 
+    ));
   })
 
 })

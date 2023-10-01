@@ -7,5 +7,15 @@ const VINYL_SOUND_EFFECT: AudioType = new Audio("/soundeffects/vinyl_soundeffect
 VINYL_SOUND_EFFECT.volume = 1;
 VINYL_SOUND_EFFECT.loop = true;
 
-export {TONE_ARM_SOUND_EFFECT, VINYL_SOUND_EFFECT}
+const BACKEND_DEV_URL = "http://localhost:8000/";
+const SS_ACCESS_TOKEN_KEY = "spotify_access_token";
+const SS_REFRESH_TOKEN_KEY = "spotify_refresh_token";
+
+export {
+  TONE_ARM_SOUND_EFFECT,
+  VINYL_SOUND_EFFECT,
+  BACKEND_DEV_URL,
+  SS_ACCESS_TOKEN_KEY,
+  SS_REFRESH_TOKEN_KEY
+}
 export type { AudioType }

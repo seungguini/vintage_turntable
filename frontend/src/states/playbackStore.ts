@@ -32,7 +32,7 @@ const usePlaybackStore = create<PlaybackStoreType>((set, get) => ({
       set({ volume: 1 })},
     setVolume: (to) => set({ volume: to }),
     isMute: () => {
-      return get().volume == 0;
+      return get().volume === 0;
     },
   },
 }));

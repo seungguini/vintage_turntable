@@ -2,6 +2,7 @@ import React from "react";
 import { useGLTF } from "@react-three/drei";
 
 import Button from "./Button";
+import { BACKEND_DEV_URL } from "../../utils/constants";
 import { useIsPlaying, usePlaybackActions } from "../../states/playbackStore";
 
 useGLTF.preload("/prev_button.glb");
@@ -76,7 +77,16 @@ export default function Buttons() {
         }}
         actionHandler={
           () => {
-            window.open("https://github.com/seungguini/vintage_turntable");
+            // window.open("https://github.com/seungguini/vintage_turntable");
+            const url = BACKEND_DEV_URL + "api/spotify/login";
+            fetch(url, {
+              method: "GET",
+              credentials: "include"
+            }).then((res) => {
+              return res.text();
+            }).then((data) => {
+              window.location.href = data;
+            })
           }
         }
         
