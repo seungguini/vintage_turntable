@@ -39,7 +39,7 @@ const useVolumeControls = (): void => {
   const volume: number = useVolume()
 
   // Initialize audio volume
-  audio.volume = 0.1;
+  audio.volume = 1;
 
   useEffect(() => {
     TONE_ARM_SOUND_EFFECT.volume = volume;
