@@ -144,9 +144,6 @@ export default function SpotifyPlayer() {
   }, []);
 
   return(
-    <div>
-      {/* <button onClick={getDevices}>Get Devices</button> */}
-      <button onClick={refreshToken}>Refresh</button>
-    </div>
+    <></>
   );
 }

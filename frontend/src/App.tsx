@@ -92,7 +92,7 @@ const App = () => {
           <Scene />
         </Canvas>
       </React.StrictMode>
-      <SpotifyPlayer></SpotifyPlayer>
+      <SpotifyPlayer/>
     </>
   );
 };

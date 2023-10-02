@@ -35,21 +35,24 @@ const usePlayback = (): void => {
         pauseSpotify(spotifyPlayer);
       } else {
         song.pause();
-        TONE_ARM_SOUND_EFFECT.play();
-        VINYL_SOUND_EFFECT.pause();
       }
+
+      TONE_ARM_SOUND_EFFECT.play();
+      VINYL_SOUND_EFFECT.pause();
     }
   }, [isPlaying]);
 
   // Song plays only when the tone arm moves onto the record
   useEffect(() => {
     if (isPlaying && toneArmFinished) {
+
+      console.log("Play button hit + tone arm moved");
+      TONE_ARM_SOUND_EFFECT.play();
+      VINYL_SOUND_EFFECT.play();
+
       if(spotifyPlayer) {
         playSpotify();
       } else {
-        console.log("Play button hit + tone arm moved");
-        TONE_ARM_SOUND_EFFECT.play();
-        VINYL_SOUND_EFFECT.play();
         song.play();
       }
     }
