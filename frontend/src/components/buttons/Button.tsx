@@ -31,7 +31,8 @@ interface ButtonProps {
   rotation: Array<number>
   actionHandler: () => void,
   modelPathAlternative?: string
-  spring?: SpringProps
+  spring?: SpringProps,
+  toggleSwitch?: boolean
 }
 
 export default function Button({
@@ -42,6 +43,7 @@ export default function Button({
   actionHandler,
   modelPathAlternative = modelPath, // Optional. If none is passed in, the alternate path is the default
   spring = DEFAULT_SPRING_VALUES, // Optional
+  toggleSwitch = false // Optional
 } : ButtonProps) {
   const [isShrunk, setShrunk] = useState<boolean>(false);
   const [isHovering, setHovering] = useState<boolean>(false);
@@ -69,6 +71,14 @@ export default function Button({
   useEffect(() => {
     document.body.style.cursor = isHovering ? "pointer" : "auto"; // change pointer to finger when hovered
   }, [isHovering]);
+
+  useEffect(() => {
+    if(toggleSwitch === false) {
+      setShowDefaultModel(true);
+    } else {
+      setShowDefaultModel(false);
+    }
+  }, [toggleSwitch])
 
   return (
     <>

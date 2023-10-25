@@ -48,6 +48,7 @@ export default function Buttons() {
         position={[0, -1, 4]}
         rotation={[0.5, 0.5, -0.25]}
         actionHandler={playClickHandler}
+        toggleSwitch={isPlaying}
       />
 
       <Button
